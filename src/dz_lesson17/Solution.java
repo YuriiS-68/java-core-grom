@@ -5,8 +5,7 @@ public class Solution {
         String str = "The has !been divided abs on98 the issue, with   moderates5789 concerned @about the on the most vulnerable.";
 
         System.out.println(countWords(str));
-        //System.out.println(maxWord(str));
-        //System.out.println(minWord(str));
+
     }
 
     public static int countWords(String input){
@@ -33,29 +32,5 @@ public class Solution {
         }
         return true;
     }
-
-   /* public static String maxWord(String input){
-        String[] words = input.split("\\s+");
-
-        String max = words[0];
-        for (String word : words) {
-            if (word.length() > max.length()){
-                max = word;
-            }
-        }
-        return max;
-    }
-
-    public static String minWord(String input){
-        String[] words = input.split("\\s+");
-
-        String min = words[0];
-        for (String word : words) {
-            if (word.length() < min.length()){
-                min = word;
-            }
-        }
-        return min;
-    }*/
 }
 
