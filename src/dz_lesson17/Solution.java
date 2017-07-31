@@ -2,100 +2,41 @@ package dz_lesson17;
 
 public class Solution {
     public static void main(String[] args) {
-        String str = "The has !been divided abs on98 the issue, with   moderates5789 concerned @about the on the most vulnerable.";
-        String str1 = "End";
-        String str2 = null;
+        String str = "http://www.test99.com";
 
-        System.out.println(countWords(str));
-        System.out.println(countWords(str1));
-
-        System.out.println("Max word: " + maxWord(str));
-        System.out.println("Min word: " + minWord(str));
-
-        System.out.println("Max word: " + maxWord(str2));
-        System.out.println("Min word: " + minWord(str2));
-
+        System.out.println(str);
+        System.out.println(validate(str));
     }
 
-    public static int countWords(String input){
-        //разбить строку на массив слов по пробелу
+    public static boolean validate(String address){
+        if (address == null || address.isEmpty())
+            return false;
 
-        int count = 0;
-        String[] words = input.split("\\s+");
+        address = address.trim();
 
-        //посчитать слова, в которых содержатся только буквы
-        for (String word : words) {
-            if (isValidWord(word)) {
-                count++;
-            }
-        }
-        return count;
+        if (!address.startsWith("http://") && !address.startsWith("https://"))
+            return false;
+
+        if (!address.endsWith(".com") && !address.endsWith(".net") && !address.endsWith(".org"))
+            return false;
+
+        address = address.replaceAll("www.", "");
+        address = address.replaceAll("http://", "");
+        address = address.replaceAll("https://", "");
+        address = address.replaceAll(".com", "");
+        address = address.replaceAll(".net", "");
+        address = address.replaceAll(".org", "");
+
+        return chek(address);
     }
 
-    private static boolean isValidWord(String word) {
-        char[] chars = word.toCharArray();
+    private static boolean chek(String body){
+        char[] chars = body.trim().toCharArray();
         for (char c : chars) {
-            if (!Character.isLetter(c)){
+            if (!Character.isLetterOrDigit(c)){
                 return false;
             }
         }
-        return !word.trim().isEmpty();
-    }
-
-    public static String maxWord(String input){
-
-        if (input == null){
-            return null;
-        }
-
-        String[] words = input.split(" ");
-
-        String max = "";
-        for (String word : words) {
-            if (isValidWord(word)) {
-                max = word;
-                break;
-            }
-        }
-
-        if (max.equals("")){
-            return null;
-        }
-
-        for (String word : words) {
-            if (isValidWord(word) && word.length() > max.length()) {
-                max = word;
-            }
-        }
-        return max;
-    }
-
-    public static String minWord(String input){
-
-        if (input == null){
-            return null;
-        }
-
-        String[] words = input.split(" ");
-
-        String min = "";
-        for (String word : words) {
-            if (isValidWord(word)){
-                min = word;
-                break;
-            }
-        }
-
-        if (min.equals("")){
-            return null;
-        }
-
-        for (String word : words) {
-            if (isValidWord(word) && word.length() < min.length()){
-                min = word;
-            }
-        }
-        return min;
+        return true;
     }
 }
-
