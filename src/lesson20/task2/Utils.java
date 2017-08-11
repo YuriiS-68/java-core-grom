@@ -1,40 +1,40 @@
 package lesson20.task2;
 
 public class Utils {
-    private int sumAmountOfTransactionsPerDay;
-    private int countOfTransactionsPerDay;
-    private int transactionAmountLimit;
-    private String[] citiesAllowed;
+    private int limitTransactionsPerDayCount;
+    private int limitSimpleTransactionAmount;
+    private int limitTransactionsPerDayAmount;
+    private String[] cities;
 
-    public String[] getCitiesAllowed() {
-        return citiesAllowed;
+    public int getLimitTransactionsPerDayCount() {
+        return limitTransactionsPerDayCount;
     }
 
-    public void setCitiesAllowed(String[] citiesAllowed) {
-        this.citiesAllowed = citiesAllowed;
+    public void setLimitTransactionsPerDayCount(int limitTransactionsPerDayCount) {
+        this.limitTransactionsPerDayCount = limitTransactionsPerDayCount;
     }
 
-    public int getTransactionAmountLimit() {
-        return transactionAmountLimit;
+    public int getLimitSimpleTransactionAmount() {
+        return limitSimpleTransactionAmount;
     }
 
-    public void setTransactionAmountLimit(int transactionAmountLimit) {
-        this.transactionAmountLimit = transactionAmountLimit;
+    public void setLimitSimpleTransactionAmount(int limitSimpleTransactionAmount) {
+        this.limitSimpleTransactionAmount = limitSimpleTransactionAmount;
     }
 
-    public int getSumAmountOfTransactionsPerDay() {
-        return sumAmountOfTransactionsPerDay;
+    public int getLimitTransactionsPerDayAmount() {
+        return limitTransactionsPerDayAmount;
     }
 
-    public void setSumAmountOfTransactionsPerDay(int sumAmountOfTransactionsPerDay) {
-        this.sumAmountOfTransactionsPerDay = sumAmountOfTransactionsPerDay;
+    public void setLimitTransactionsPerDayAmount(int limitTransactionsPerDayAmount) {
+        this.limitTransactionsPerDayAmount = limitTransactionsPerDayAmount;
     }
 
-    public int getCountOfTransactionsPerDay() {
-        return countOfTransactionsPerDay;
+    public String[] getCities() {
+        return cities;
     }
 
-    public void setCountOfTransactionsPerDay(int countOfTransactionsPerDay) {
-        this.countOfTransactionsPerDay = countOfTransactionsPerDay;
+    public void setCities(String[] cities) {
+        this.cities = cities;
     }
 }
