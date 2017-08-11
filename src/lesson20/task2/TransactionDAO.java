@@ -13,7 +13,7 @@ public class TransactionDAO {
 
         return null;
     }
-    
+
 
     public Transaction[] getTransactionsPerDay(Date dateOfCurTransaction){
         Calendar calendar = Calendar.getInstance();
