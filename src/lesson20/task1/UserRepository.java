@@ -1,5 +1,9 @@
 package lesson20.task1;
 
+import lesson20.task1.exception.BadRequestException;
+import lesson20.task1.exception.InternalServerException;
+import lesson20.task1.exception.UserNotFoundException;
+
 public class UserRepository {
     public static void main(String[] args) {
 
