@@ -1,4 +1,4 @@
-package dz_lesson27;
+package dz_lesson27.task1;
 
 import java.util.LinkedList;
 
