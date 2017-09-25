@@ -1,6 +1,7 @@
 package dz_lesson27.task2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
     public static void main(String[] args) {
@@ -53,9 +54,12 @@ public class UserRepository {
     }
 
     private User findById(long id){
+        int index = 0;
         for (User user : users) {
-            if(user != null && id == user.getId())
-                return user;
+            if (user != null && id == user.getId()){
+                return users.get(index);
+            }
+            index++;
         }
         return null;
     }
