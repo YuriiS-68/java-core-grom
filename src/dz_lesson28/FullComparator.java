@@ -11,6 +11,9 @@ public class FullComparator implements Comparator<Capability> {
         if (!o1.getFingerprint().equals(o2.getFingerprint()))
             return o1.getFingerprint().compareTo(o2.getFingerprint());
 
-        return o2.getDateCreated().compareTo(o1.getDateCreated());
+        if (!o2.getDateCreated().equals(o1.getDateCreated()))
+            return o2.getDateCreated().compareTo(o1.getDateCreated());
+
+        return 0;
     }
 }
