@@ -7,7 +7,7 @@ public class Demo {
     public static void main(String[] args) throws Exception{
         ArrayList<Capability> capabilities = new ArrayList<>();
 
-        Capability capability1 = new Capability(1001, "test", "1111", false, new Date());
+        Capability capability1 = new Capability(1001, "test", null, false, new Date());
         Thread.sleep(1000);
         Capability capability2 = new Capability(1002, "atest", "1111", false, new Date());
         Thread.sleep(1000);
