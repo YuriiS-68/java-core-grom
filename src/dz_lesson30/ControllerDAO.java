@@ -135,12 +135,15 @@ public class ControllerDAO {
             throw new NullPointerException("Customer does not exist");
 
         ArrayList<Employee> employeesByCustomerProjects = new ArrayList<>();
-        for (Employee employee : employeeDAO.getEmployees()){
-            if (employee != null && employee.getProjects() != null && employee.getProjects().contains(customer)){
-                employeesByCustomerProjects.add(employee);
+        for (Project project : projectDAO.getProjects()){
+            if (project != null && project.getCustomer() != null && project.getCustomer().equals(customer) ){
+                for (Employee employee : employeeDAO.getEmployees()){
+                    if (employee != null && employee.getProjects() != null && employee.getProjects().contains(project)){
+                        employeesByCustomerProjects.add(employee);
+                    }
+                }
             }
         }
         return employeesByCustomerProjects;
     }
-
 }

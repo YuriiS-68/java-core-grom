@@ -8,7 +8,6 @@ public class Demo {
         EmployeeDAO employeeDAO = new EmployeeDAO();
         ProjectDAO projectDAO = new ProjectDAO();
         CustomerDAO customerDAO = new CustomerDAO();
-        DepartmentDAO departmentDAO = new DepartmentDAO();
 
         Employee employee1 = new Employee("A1", "AA1", new Date(), Position.TEAM_LEAD);
         Employee employee2 = new Employee("A2", "AA2", new Date(), Position.DEVELOPER);
@@ -45,7 +44,7 @@ public class Demo {
         customerDAO.getCustomers().add(customer4);
 
         Project project1 = new Project("project1", customer1);
-        Project project2 = new Project("project2", customer1);
+        Project project2 = new Project("project2", customer2);
         Project project3 = new Project("project3", customer3);
 
         projectDAO.getProjects().add(project1);
