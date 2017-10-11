@@ -1,13 +1,22 @@
 package dz_lesson30;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.ArrayList;
 
 public class EmployeeDAO {
-    private Set<Employee> employees = new HashSet<>();
+    private static ArrayList<Employee> employees = new ArrayList<>();
 
-    public Set<Employee> getEmployees() {
+    public ArrayList<Employee> getEmployees() {
         return employees;
+    }
+
+    public void setEmployees(ArrayList<Employee> employees) {
+        EmployeeDAO.employees = employees;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeDAO{" +
+                "employees=" + employees +
+                '}';
     }
 }

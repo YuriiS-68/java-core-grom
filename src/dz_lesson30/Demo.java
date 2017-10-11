@@ -1,15 +1,13 @@
 package dz_lesson30;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Demo {
-    public static void main(String[] args) {
+    public static void main(String[] args)throws Exception{
 
         EmployeeDAO employeeDAO = new EmployeeDAO();
-
+        ProjectDAO projectDAO = new ProjectDAO();
+        CustomerDAO customerDAO = new CustomerDAO();
 
         Employee employee1 = new Employee("A1", "AA1", new Date(), Position.TEAM_LEAD);
         Employee employee2 = new Employee("A2", "AA2", new Date(), Position.DEVELOPER);
@@ -20,22 +18,52 @@ public class Demo {
         Employee employee7 = new Employee("A7", "AA7", new Date(), Position.FINANCE);
         Employee employee8 = new Employee("A8", "AA8", new Date(), Position.OTHER);
 
+        Department department1 = new Department(DepartmentType.ECOLOGICAL, employeeDAO.getEmployees());
+        Department department2 = new Department(DepartmentType.SCIENTIFIC, employeeDAO.getEmployees());
+        employee1.setDepartment(department1);
+        employee2.setDepartment(department1);
+        employee3.setDepartment(department2);
+        employee5.setDepartment(department1);
+        employee6.setDepartment(department1);
+
         Customer customer1 = new Customer("customer1", "China", 1000);
         Customer customer2 = new Customer("customer2", "China", 1200);
         Customer customer3 = new Customer("customer3", "Italy", 800);
         Customer customer4 = new Customer("customer4", "Canada", 1600);
 
-        Projects project1 = new Projects("project1", customer1);
-        Projects project2 = new Projects("project2", customer2);
-        Projects project3 = new Projects("project3", customer3);
+        customerDAO.getCustomers().add(customer1);
+        customerDAO.getCustomers().add(customer2);
+        customerDAO.getCustomers().add(customer3);
+        customerDAO.getCustomers().add(customer4);
 
-        ArrayList<Projects> projects = new ArrayList<>();
-        projects.add(project1);
-        projects.add(project2);
-        projects.add(project3);
+        Project project1 = new Project("project1", customer1);
+        Project project2 = new Project("project2", customer2);
+        Project project3 = new Project("project3", customer3);
 
+        projectDAO.getProjects().add(project1);
 
+        employee1.setProjects(projectDAO.getProjects());
+        employee5.setProjects(projectDAO.getProjects());
 
+        employeeDAO.getEmployees().add(employee3);
+        employeeDAO.getEmployees().add(employee1);
+        employeeDAO.getEmployees().add(employee5);
+        employeeDAO.getEmployees().add(employee2);
+        employeeDAO.getEmployees().add(employee6);
 
+        System.out.println(employeeDAO.getEmployees());
+
+        System.out.println();
+        System.out.println("Array employees: - " + employeeDAO.getEmployees());
+        System.out.println();
+        System.out.println("Employees working on the project1: - " + ControllerDAO.employeesByProject(project1));
+        System.out.println("Employees working on the project2: - " + ControllerDAO.employeesByProject(project2));
+
+        System.out.println(ControllerDAO.projectsByEmployee(employee1));
+        System.out.println(ControllerDAO.projectsByEmployee(employee5));
+        System.out.println();
+        System.out.println(ControllerDAO.employeesByDepartmentWithoutProject(department2));
+        System.out.println();
+        System.out.println(ControllerDAO.employeesWithoutProject());
     }
 }

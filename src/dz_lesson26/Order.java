@@ -21,7 +21,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderMovieSession{" +
                 "id=" + id +
                 ", price=" + price +
                 ", currency='" + currency + '\'' +

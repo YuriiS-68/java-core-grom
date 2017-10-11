@@ -1,12 +1,11 @@
 package dz_lesson30;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
 
 public class DepartmentDAO {
-    private Set<Employee> employees = new HashSet<>();
+    private static LinkedList<Department> departments = new LinkedList<>();
 
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
+    public static void setDepartments(LinkedList<Department> departments) {
+        DepartmentDAO.departments = departments;
     }
 }

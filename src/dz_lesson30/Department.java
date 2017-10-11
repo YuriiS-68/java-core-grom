@@ -1,7 +1,6 @@
 package dz_lesson30;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
 public class Department {
     private DepartmentType type;
@@ -14,5 +13,12 @@ public class Department {
 
     public DepartmentType getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "type=" + type +
+                '}';
     }
 }

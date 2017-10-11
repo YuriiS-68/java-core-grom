@@ -1,10 +1,10 @@
 package dz_lesson30;
 
-public class Projects {
+public class Project {
     private String name;
     private Customer customer;
 
-    public Projects(String name, Customer customer) {
+    public Project(String name, Customer customer) {
         this.name = name;
         this.customer = customer;
     }
@@ -14,10 +14,10 @@ public class Projects {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Projects projects = (Projects) o;
+        Project project = (Project) o;
 
-        if (!name.equals(projects.name)) return false;
-        return customer.equals(projects.customer);
+        if (!name.equals(project.name)) return false;
+        return customer.equals(project.customer);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Projects {
 
     @Override
     public String toString() {
-        return "Projects{" +
+        return "Project{" +
                 "name='" + name + '\'' +
                 ", customer=" + customer +
                 '}';
