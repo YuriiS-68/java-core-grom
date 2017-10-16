@@ -32,6 +32,8 @@ public class Demo {
         employee3.setDepartment(department2);
         employee5.setDepartment(department1);
         employee6.setDepartment(department1);
+        employee7.setDepartment(department2);
+        employee8.setDepartment(department2);
 
         Customer customer1 = new Customer("customer1", "China", 1000);
         Customer customer2 = new Customer("customer2", "China", 1200);
@@ -46,9 +48,10 @@ public class Demo {
         Project project1 = new Project("project1", customer1);
         Project project2 = new Project("project2", customer2);
         Project project3 = new Project("project3", customer3);
+        Project project4 = new Project(null, null);
 
         projectDAO.getProjects().add(project1);
-        projectDAO.getProjects().add(project2);
+        projectDAO.getProjects().add(project4);
 
         lead.setProjects(projectDAO.getProjects());
         employee1.setProjects(projectDAO.getProjects());
@@ -60,20 +63,22 @@ public class Demo {
         employeeDAO.getEmployees().add(employee5);
         employeeDAO.getEmployees().add(employee2);
         employeeDAO.getEmployees().add(employee6);
+        employeeDAO.getEmployees().add(employee7);
+        employeeDAO.getEmployees().add(employee8);
 
-        System.out.println(employeeDAO.getEmployees());
+        //System.out.println(employeeDAO.getEmployees());
 
-        System.out.println();
-        System.out.println("Array employees: - " + employeeDAO.getEmployees());
-        System.out.println();
-        System.out.println("Employees working on the project1: - " + ControllerDAO.employeesByProject(project1));
-        System.out.println("Employees working on the project2: - " + ControllerDAO.employeesByProject(project2));
+        //System.out.println();
+        //System.out.println("Array employees: - " + employeeDAO.getEmployees());
+        //System.out.println();
+        //System.out.println("Employees working on the project1: - " + ControllerDAO.employeesByProject(project1));
+        //System.out.println("Employees working on the project2: - " + ControllerDAO.employeesByProject(project2));
 
-        System.out.println(ControllerDAO.projectsByEmployee(employee1));
-        System.out.println(ControllerDAO.projectsByEmployee(employee5));
-        System.out.println();
+        //System.out.println(ControllerDAO.projectsByEmployee(employee1));
+        //System.out.println(ControllerDAO.projectsByEmployee(employee5));
+        //System.out.println();
         System.out.println(ControllerDAO.employeesByDepartmentWithoutProject(department2));
-        System.out.println();
+        /*System.out.println();
         System.out.println(ControllerDAO.employeesWithoutProject());
         System.out.println();
         System.out.println(ControllerDAO.employeesByTeamLead(lead));
@@ -85,5 +90,6 @@ public class Demo {
         System.out.println(ControllerDAO.projectsByCustomer(customer1));
         System.out.println();
         System.out.println(ControllerDAO.employeesByCustomerProjects(customer1));
+        */
     }
 }
