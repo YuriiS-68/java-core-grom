@@ -51,7 +51,7 @@ public class Demo {
         Project project4 = new Project(null, null);
 
         projectDAO.getProjects().add(project1);
-        projectDAO.getProjects().add(project4);
+        projectDAO.getProjects().add(project3);
 
         lead.setProjects(projectDAO.getProjects());
         employee1.setProjects(projectDAO.getProjects());

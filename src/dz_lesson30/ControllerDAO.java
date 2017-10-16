@@ -38,14 +38,22 @@ public class ControllerDAO {
     }
 
     public static ArrayList<Employee> employeesByDepartmentWithoutProject(Department department)throws Exception{
-        //пройти по списку сотрудников, сравнить нужный департамент и не занятых сотрудников ни в одном проекте вывести списком
+        //взять сотрудников из нужного департамерта
+        //проверить пустой ли список проектов у сотрудника и если пустой занести его в список
         if (department == null)
             throw new InternalServerException("Department does not exist");
 
         ArrayList<Employee> employeesWithoutProject = new ArrayList<>();
         for (Employee employee : employeeDAO.getEmployees()){
-            if (employee != null && employee.getProjects() != null && !employee.getProjects().isEmpty() && employee.getDepartment().equals(department)|| employee.getProjects() == null && employee.getDepartment().equals(department)){
+            if (employee != null && employee.getProjects() == null && employee.getDepartment().equals(department)){
                 employeesWithoutProject.add(employee);
+            }
+            if (employee != null && employee.getProjects() != null && employee.getDepartment().equals(department)){
+                for(Project project : projectDAO.getProjects()){
+                    if (project != null && project.getName() == null || project != null && project.getCustomer() == null){
+                        employeesWithoutProject.add(employee);
+                    }
+                }
             }
         }
         return employeesWithoutProject;
