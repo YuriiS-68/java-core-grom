@@ -50,7 +50,7 @@ public class Demo {
         Project project3 = new Project("project3", customer3);
         Project project4 = new Project(null, null);
 
-        projectDAO.getProjects().add(project1);
+        //projectDAO.getProjects().add(project1);
         projectDAO.getProjects().add(project3);
 
         lead.setProjects(projectDAO.getProjects());
