@@ -44,7 +44,13 @@ public class ControllerDAO {
 
         ArrayList<Employee> employeesWithoutProject = new ArrayList<>();
         for (Employee employee : employeeDAO.getEmployees()){
-            if (employee != null && employee.getDepartment().equals(department) && employee.getProjects() != null && employee.getProjects().size() == 0 || employee != null && employee.getDepartment().equals(department) && employee.getProjects() == null){
+            if (employee != null && employee.getDepartment().equals(department) && employee.getProjects() != null && employee.getProjects().size() == 0){
+                employeesWithoutProject.add(employee);
+            }
+        }
+
+        for (Employee employee : employeeDAO.getEmployees()){
+            if (employee != null && employee.getDepartment().equals(department) && employee.getProjects() == null){
                 employeesWithoutProject.add(employee);
             }
         }
@@ -54,7 +60,13 @@ public class ControllerDAO {
     public static ArrayList<Employee> employeesWithoutProject(){
         ArrayList<Employee> employeesWithoutProject = new ArrayList<>();
         for (Employee employee : employeeDAO.getEmployees()){
-            if (employee != null && employee.getProjects() == null || employee != null && employee.getProjects().size() == 0){
+            if (employee != null && employee.getProjects() != null && employee.getProjects().size() == 0){
+                employeesWithoutProject.add(employee);
+            }
+        }
+
+        for (Employee employee : employeeDAO.getEmployees()){
+            if (employee != null && employee.getProjects() == null){
                 employeesWithoutProject.add(employee);
             }
         }
@@ -62,7 +74,7 @@ public class ControllerDAO {
     }
 
     public static ArrayList<Employee> employeesByTeamLead(Employee lead)throws Exception{
-        //пройти по списку сотрудников и сравнить проекты, в которых они задействованы и сравнить департамент, в которм они находятся
+        //пройти по списку сотрудников и сравнить проекты, в которых они задействованы с проектом тимлида
         //вернуть список или вывести его в консоль
         if (lead == null)
             throw new Exception("Lead does not exist");
@@ -72,12 +84,8 @@ public class ControllerDAO {
 
         ArrayList<Employee> employeesByTeamLead = new ArrayList<>();
         for (Employee employee : employeeDAO.getEmployees()){
-            if (employee != null && lead.getDepartment() != null && lead.getProjects() != null && employee.getDepartment() != null ){
-                if (employee.getProjects() != null && employee.getProjects().equals(lead.getProjects()) && employee.getDepartment().equals(lead.getDepartment())){
-                    if (employee.getPosition() != Position.TEAM_LEAD){
-                        employeesByTeamLead.add(employee);
-                    }
-                }
+            if (employee != null && employee.getProjects() != null && employee.getProjects().equals(lead.getProjects()) && employee.getPosition() != Position.TEAM_LEAD){
+                employeesByTeamLead.add(employee);
             }
         }
         return employeesByTeamLead;

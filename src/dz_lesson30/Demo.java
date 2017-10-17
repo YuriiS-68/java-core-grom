@@ -9,10 +9,10 @@ public class Demo {
         ProjectDAO projectDAO = new ProjectDAO();
         CustomerDAO customerDAO = new CustomerDAO();
 
-        Employee employee1 = new Employee("A1", "AA1", new Date(), Position.TEAM_LEAD);
+        Employee employee1 = new Employee("LEAD", "AA1", new Date(), Position.TEAM_LEAD);
         Employee employee2 = new Employee("A2", "AA2", new Date(), Position.DEVELOPER);
         Employee employee3 = new Employee("A3", "AA3", new Date(), Position.DEVELOPER);
-        Employee lead = new Employee("LEAD", "TL1", new Date(), Position.TEAM_LEAD);
+        Employee employee4 = new Employee("LEAD", "TL1", new Date(), Position.TEAM_LEAD);
         Employee employee5 = new Employee("A5", "AA5", new Date(), Position.DEVELOPER);
         Employee employee6 = new Employee("A6", "AA6", new Date(), Position.DEVELOPER);
         Employee employee7 = new Employee("A7", "AA7", new Date(), Position.FINANCE);
@@ -26,7 +26,7 @@ public class Demo {
 
         Department department1 = new Department(DepartmentType.ECOLOGICAL, employeeDAO.getEmployees());
         Department department2 = new Department(DepartmentType.SCIENTIFIC, employeeDAO.getEmployees());
-        lead.setDepartment(department1);
+        employee4.setDepartment(department1);
         employee1.setDepartment(department1);
         employee2.setDepartment(department1);
         employee3.setDepartment(department2);
@@ -53,10 +53,11 @@ public class Demo {
         //projectDAO.getProjects().add(project1);
         projectDAO.getProjects().add(project3);
 
-        lead.setProjects(projectDAO.getProjects());
+        employee4.setProjects(projectDAO.getProjects());
         employee1.setProjects(projectDAO.getProjects());
         employee5.setProjects(projectDAO.getProjects());
         employee3.setProjects(projectDAO.getProjects());
+        employee2.setProjects(projectDAO.getProjects());
 
         employeeDAO.getEmployees().add(employee3);
         employeeDAO.getEmployees().add(employee1);
@@ -65,6 +66,7 @@ public class Demo {
         employeeDAO.getEmployees().add(employee6);
         employeeDAO.getEmployees().add(employee7);
         employeeDAO.getEmployees().add(employee8);
+        employeeDAO.getEmployees().add(employee4);
 
         //System.out.println(employeeDAO.getEmployees());
 
@@ -77,12 +79,12 @@ public class Demo {
         //System.out.println(ControllerDAO.projectsByEmployee(employee1));
         //System.out.println(ControllerDAO.projectsByEmployee(employee5));
         //System.out.println();
-        System.out.println(ControllerDAO.employeesByDepartmentWithoutProject(department2));
+        //System.out.println(ControllerDAO.employeesByDepartmentWithoutProject(department1));
+        //System.out.println();
+        //System.out.println(ControllerDAO.employeesWithoutProject());
+        System.out.println();
+        System.out.println(ControllerDAO.employeesByTeamLead(employee1));
         /*System.out.println();
-        System.out.println(ControllerDAO.employeesWithoutProject());
-        System.out.println();
-        System.out.println(ControllerDAO.employeesByTeamLead(lead));
-        System.out.println();
         System.out.println(ControllerDAO.teamLeadsByEmployee(employee3));
         System.out.println();
         System.out.println(ControllerDAO.employeesByProjectEmployee(employee5));
