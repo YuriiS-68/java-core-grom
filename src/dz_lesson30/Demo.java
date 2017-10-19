@@ -90,12 +90,11 @@ public class Demo {
         //System.out.println(ControllerDAO.employeesByTeamLead(employee4));
         //System.out.println();
         //System.out.println(ControllerDAO.teamLeadsByEmployee(employee3));
-        System.out.println();
-        System.out.println(ControllerDAO.employeesByProjectEmployee(employee5));
-        /*System.out.println();
-        System.out.println(ControllerDAO.projectsByCustomer(customer1));
-        System.out.println();
-        System.out.println(ControllerDAO.employeesByCustomerProjects(customer1));
-        */
+        //System.out.println();
+        //System.out.println(ControllerDAO.employeesByProjectEmployee(employee5));
+        //System.out.println();
+        //System.out.println(ControllerDAO.projectsByCustomer(customer1));
+        //System.out.println();
+        System.out.println(ControllerDAO.employeesByCustomerProjects(customer2));
     }
 }

@@ -145,18 +145,14 @@ public class ControllerDAO {
         return projectsByCustomer;
     }
 
-    public static ArrayList<Employee> employeesByCustomerProjects(Customer customer)throws Exception{
+    public static Set<Employee> employeesByCustomerProjects(Customer customer)throws Exception{
         if (customer == null)
             throw new Exception("Customer does not exist");
 
-        ArrayList<Employee> employeesByCustomerProjects = new ArrayList<>();
-        for (Project project : projectDAO.getProjects1()){
-            if (project != null && project.getCustomer() != null && project.getCustomer().equals(customer) ){
-                for (Employee employee : employeeDAO.getEmployees()){
-                    if (employee != null && employee.getProjects() != null && employee.getProjects().contains(project)){
-                        employeesByCustomerProjects.add(employee);
-                    }
-                }
+        Set<Employee> employeesByCustomerProjects = new HashSet<>();
+        for (Project project : projectsByCustomer(customer)){
+            if (project != null){
+                employeesByCustomerProjects.addAll(employeesByProject(project));
             }
         }
         return employeesByCustomerProjects;
