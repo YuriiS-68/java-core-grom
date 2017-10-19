@@ -9,10 +9,10 @@ public class Demo {
         ProjectDAO projectDAO = new ProjectDAO();
         CustomerDAO customerDAO = new CustomerDAO();
 
-        Employee employee1 = new Employee("LEAD", "AA1", new Date(), Position.TEAM_LEAD);
+        Employee employee1 = new Employee("LEAD1", "AA1", new Date(), Position.TEAM_LEAD);
         Employee employee2 = new Employee("A2", "AA2", new Date(), Position.DEVELOPER);
         Employee employee3 = new Employee("A3", "AA3", new Date(), Position.DEVELOPER);
-        Employee employee4 = new Employee("LEAD", "TL1", new Date(), Position.TEAM_LEAD);
+        Employee employee4 = new Employee("LEAD2", "TL1", new Date(), Position.TEAM_LEAD);
         Employee employee5 = new Employee("A5", "AA5", new Date(), Position.DEVELOPER);
         Employee employee6 = new Employee("A6", "AA6", new Date(), Position.DEVELOPER);
         Employee employee7 = new Employee("A7", "AA7", new Date(), Position.FINANCE);
@@ -50,15 +50,17 @@ public class Demo {
         Project project3 = new Project("project3", customer3);
         Project project4 = new Project("project4", customer4);
 
-        projectDAO.getProjects1().add(project4);
-        projectDAO.getProjects2().add(project2);
         projectDAO.getProjects2().add(project4);
+        projectDAO.getProjects3().add(project2);
+        projectDAO.getProjects1().add(project4);
+        projectDAO.getProjects1().add(project2);
 
-        employee4.setProjects(projectDAO.getProjects1());
-        employee1.setProjects(projectDAO.getProjects1());
+        employee4.setProjects(projectDAO.getProjects2());
+        employee1.setProjects(projectDAO.getProjects3());
 
-        employee5.setProjects(projectDAO.getProjects2());
-        employee3.setProjects(projectDAO.getProjects2());
+
+        employee5.setProjects(projectDAO.getProjects1());
+        employee3.setProjects(projectDAO.getProjects3());
         employee2.setProjects(projectDAO.getProjects2());
 
         employeeDAO.getEmployees().add(employee3);
@@ -85,12 +87,12 @@ public class Demo {
         //System.out.println();
         //System.out.println(ControllerDAO.employeesWithoutProject());
         //System.out.println();
-        System.out.println(ControllerDAO.employeesByTeamLead(employee4));
-        /*System.out.println();
-        System.out.println(ControllerDAO.teamLeadsByEmployee(employee3));
+        //System.out.println(ControllerDAO.employeesByTeamLead(employee4));
+        //System.out.println();
+        //System.out.println(ControllerDAO.teamLeadsByEmployee(employee3));
         System.out.println();
         System.out.println(ControllerDAO.employeesByProjectEmployee(employee5));
-        System.out.println();
+        /*System.out.println();
         System.out.println(ControllerDAO.projectsByCustomer(customer1));
         System.out.println();
         System.out.println(ControllerDAO.employeesByCustomerProjects(customer1));

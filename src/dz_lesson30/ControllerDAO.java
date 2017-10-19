@@ -84,8 +84,6 @@ public class ControllerDAO {
         if (lead.getPosition() != Position.TEAM_LEAD)
             throw new BadRequestException("You did not enter the manager");
 
-        System.out.println(projectsByForLead(lead));
-
         Set<Employee> employeesByTeamLead = new HashSet<>();
         for (Project project : projectsByForLead(lead)){
             if (project != null){
@@ -93,6 +91,75 @@ public class ControllerDAO {
             }
         }
         return employeesByTeamLead;
+    }
+
+    public static Set<Employee> teamLeadsByEmployee(Employee employee)throws Exception{
+        //пройти по списку проектов сотрудника и найти его руководителей
+        //вернуть список сотрудников у которых будет совпадать проект с проектом руководителя
+        if (employee == null)
+            throw new Exception("Employee does not exist");
+
+        if (employee.getPosition() == Position.TEAM_LEAD)
+            throw new BadRequestException("You did not enter the employee");
+
+        Set<Employee> teamLeadsByEmployee = new HashSet<>();
+        for (Project project : projectsByForEmployee(employee)){
+            if(project != null){
+                teamLeadsByEmployee.addAll(onlyLeadByProject(project));
+            }
+        }
+        return teamLeadsByEmployee;
+    }
+
+    public static Set<Employee> employeesByProjectEmployee(Employee employee)throws Exception{
+        //взять список проектов сотрудника
+        //пройти по нему и взять сотрудников с такими же проектами
+        if (employee == null)
+            throw new Exception("Employee does not exist");
+
+        if (employee.getPosition() == Position.TEAM_LEAD)
+            throw new BadRequestException("You did not enter an employee");
+
+        Set<Employee> employeesByProjectEmployee = new HashSet<>();
+        for (Project project : projectsByForEmployee(employee)){
+            if (project != null){
+                employeesByProjectEmployee.addAll(onlyEmployeesByProject(project));
+            }
+        }
+
+        employeesByProjectEmployee.remove(employee);
+
+        return employeesByProjectEmployee;
+    }
+
+    public static ArrayList<Project> projectsByCustomer(Customer customer)throws Exception{
+        if (customer == null)
+            throw new Exception("Customer does not exist");
+
+        ArrayList<Project> projectsByCustomer = new ArrayList<>();
+        for (Project project : projectDAO.getProjects1()){
+            if (project != null && project.getCustomer().equals(customer)){
+                projectsByCustomer.add(project);
+            }
+        }
+        return projectsByCustomer;
+    }
+
+    public static ArrayList<Employee> employeesByCustomerProjects(Customer customer)throws Exception{
+        if (customer == null)
+            throw new Exception("Customer does not exist");
+
+        ArrayList<Employee> employeesByCustomerProjects = new ArrayList<>();
+        for (Project project : projectDAO.getProjects1()){
+            if (project != null && project.getCustomer() != null && project.getCustomer().equals(customer) ){
+                for (Employee employee : employeeDAO.getEmployees()){
+                    if (employee != null && employee.getProjects() != null && employee.getProjects().contains(project)){
+                        employeesByCustomerProjects.add(employee);
+                    }
+                }
+            }
+        }
+        return employeesByCustomerProjects;
     }
 
     private static ArrayList<Employee> onlyEmployeesByProject(Project project)throws Exception{
@@ -121,69 +188,29 @@ public class ControllerDAO {
         throw new BadRequestException("Employee not was found");
     }
 
-    public static ArrayList<Employee> teamLeadsByEmployee(Employee employee)throws Exception{
+    private static ArrayList<Project> projectsByForEmployee(Employee employee)throws Exception{
         if (employee == null)
             throw new Exception("Employee does not exist");
 
-        if (employee.getPosition() == Position.TEAM_LEAD)
-            throw new BadRequestException("You did not enter the manager");
-
-        ArrayList<Employee> teamLeadsByEmployee = new ArrayList<>();
         for (Employee employee1 : employeeDAO.getEmployees()){
-            if (employee1 != null && employee1.getProjects() != null && employee1.getPosition() == Position.TEAM_LEAD){
-                if (employee.getProjects() != null && employee.getProjects().equals(employee1.getProjects())){
-                    teamLeadsByEmployee.add(employee1);
-                }
+            if (employee1 != null && employee.getPosition() != Position.TEAM_LEAD && employee1.equals(employee)){
+                return (ArrayList<Project>) employee.getProjects();
             }
         }
-        return teamLeadsByEmployee;
+        throw new BadRequestException("Employee not was found");
     }
 
-    public static ArrayList<Employee> employeesByProjectEmployee(Employee employee)throws Exception{
-        if (employee == null)
-            throw new Exception("Employee does not exist");
+    private static ArrayList<Employee> onlyLeadByProject(Project project)throws Exception{
+        //пройти по списку сотрудников и взять только тех руководителей, в проекта которых занят данный сотрудник
+        if (project == null)
+            throw new Exception("Project does not exist");
 
-        if (employee.getPosition() == Position.TEAM_LEAD)
-            throw new BadRequestException("You did not enter an employee");
-
-        ArrayList<Employee> employeesByProjectEmployee = new ArrayList<>();
-        for (Employee employee1 : employeeDAO.getEmployees()){
-            if (employee1 != null && employee.getProjects() != null && employee1.getProjects() != null && employee.getPosition() != Position.TEAM_LEAD){
-                if (employee1.getPosition() != Position.TEAM_LEAD && employee1.getProjects().equals(employee.getProjects())){
-                    employeesByProjectEmployee.add(employee1);
-                }
+        ArrayList<Employee> employeesOnProject = new ArrayList<>();
+        for (Employee employee : employeeDAO.getEmployees()){
+            if (employee != null && employee.getPosition() == Position.TEAM_LEAD && employee.getProjects() != null && employee.getProjects().contains(project)){
+                employeesOnProject.add(employee);
             }
         }
-        return employeesByProjectEmployee;
-    }
-
-    public static ArrayList<Project> projectsByCustomer(Customer customer)throws Exception{
-        if (customer == null)
-            throw new Exception("Customer does not exist");
-
-        ArrayList<Project> projectsByCustomer = new ArrayList<>();
-        for (Project project : projectDAO.getProjects2()){
-            if (project != null && project.getCustomer().equals(customer)){
-                projectsByCustomer.add(project);
-            }
-        }
-        return projectsByCustomer;
-    }
-
-    public static ArrayList<Employee> employeesByCustomerProjects(Customer customer)throws Exception{
-        if (customer == null)
-            throw new Exception("Customer does not exist");
-
-        ArrayList<Employee> employeesByCustomerProjects = new ArrayList<>();
-        for (Project project : projectDAO.getProjects2()){
-            if (project != null && project.getCustomer() != null && project.getCustomer().equals(customer) ){
-                for (Employee employee : employeeDAO.getEmployees()){
-                    if (employee != null && employee.getProjects() != null && employee.getProjects().contains(project)){
-                        employeesByCustomerProjects.add(employee);
-                    }
-                }
-            }
-        }
-        return employeesByCustomerProjects;
+        return employeesOnProject;
     }
 }
