@@ -61,7 +61,7 @@ public class Demo {
 
         employee5.setProjects(projectDAO.getProjects1());
         employee3.setProjects(projectDAO.getProjects3());
-        employee2.setProjects(projectDAO.getProjects2());
+        employee2.setProjects(projectDAO.getProjects3());
 
         employeeDAO.getEmployees().add(employee3);
         employeeDAO.getEmployees().add(employee1);
@@ -87,7 +87,7 @@ public class Demo {
         //System.out.println();
         //System.out.println(ControllerDAO.employeesWithoutProject());
         //System.out.println();
-        //System.out.println(ControllerDAO.employeesByTeamLead(employee4));
+        System.out.println(ControllerDAO.employeesByTeamLead(employee4));
         //System.out.println();
         //System.out.println(ControllerDAO.teamLeadsByEmployee(employee3));
         //System.out.println();
@@ -95,6 +95,6 @@ public class Demo {
         //System.out.println();
         //System.out.println(ControllerDAO.projectsByCustomer(customer1));
         //System.out.println();
-        System.out.println(ControllerDAO.employeesByCustomerProjects(customer2));
+        //System.out.println(ControllerDAO.employeesByCustomerProjects(customer2));
     }
 }

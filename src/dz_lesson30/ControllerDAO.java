@@ -123,7 +123,7 @@ public class ControllerDAO {
         Set<Employee> employeesByProjectEmployee = new HashSet<>();
         for (Project project : projectsByForEmployee(employee)){
             if (project != null){
-                employeesByProjectEmployee.addAll(onlyEmployeesByProject(project));
+                employeesByProjectEmployee.addAll(employeesByProject(project));
             }
         }
 
@@ -165,7 +165,7 @@ public class ControllerDAO {
 
         ArrayList<Employee> employeesOnProject = new ArrayList<>();
         for (Employee employee : employeeDAO.getEmployees()){
-            if (employee != null && employee.getProjects() != null && employee.getProjects().contains(project)){
+            if (employee != null && employee.getPosition() != Position.TEAM_LEAD && employee.getProjects() != null && employee.getProjects().contains(project)){
                 employeesOnProject.add(employee);
             }
         }
