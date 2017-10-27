@@ -44,7 +44,7 @@ public class Solution {
         ArrayList<String> words = new ArrayList<>();
         String[] str = text.split("\\W+");
         for (String el : str){
-            if (el != null && isValidWord(el)){
+            if (el != null && isValidWord(el) && el.length() >= 2){
                 words.add(el);
             }
         }
