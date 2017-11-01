@@ -9,7 +9,7 @@ public class Solution {
         //если ключ с таким символом есть, то заношу его в мапу и считаю сколько раз он повторяется
         //если нету заношу в мапу и ставлю 1
         String text = "Aaaaaaa aaa mmmmm";
-        String text2 = "the the the the the the tg";
+        String text2 = "the the the, the the the tg!";
         System.out.println(countSymbols(text));
         System.out.println(words(text2));
     }
@@ -24,8 +24,9 @@ public class Solution {
         Map<Character, Integer> map = new HashMap<>();
 
         ArrayList<Character> chars = new ArrayList<>();
+
         for (int i = 0; i < text.length(); i++) {
-            char c = text.toLowerCase().charAt(i);
+            char c = text.charAt(i);
             if (Character.isLetter(c)){
                 chars.add(c);
             }
@@ -61,7 +62,9 @@ public class Solution {
         Map<String, Integer> map = new HashMap<>();
 
         ArrayList<String> words = new ArrayList<>();
-        String[] str = text.split("\\W+");
+
+        String[] str = text.split(" ");
+
         for (String el : str){
             if (el != null && isValidWord(el) && el.length() > 1){
                 words.add(el);
@@ -95,5 +98,4 @@ public class Solution {
         }
         return !word.trim().isEmpty();
     }
-
 }
