@@ -30,10 +30,13 @@ public class Solution {
 
         while (countErrors < 3){
             System.out.println("Enter ten numbers from 1 to 100");
+
             String str = br.readLine();
+
             if (checkDigital(str) && checkNumbers(str)){
                 ArrayList<String> numbers = new ArrayList<>();
-                String[] word = str.trim().split(" ");
+                String[] word = str.split(" ");
+
                 int index = 0;
                 for (String s : word) {
                     if (s != null){
@@ -63,13 +66,13 @@ public class Solution {
         }
     }
 
-    private static boolean checkDigital(String word)throws Exception{
-        if (word == null)
+    private static boolean checkDigital(String stroka)throws Exception{
+        if (stroka == null)
             throw new Exception("Not text");
 
         char previousChar = '.';
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
+        for (int i = 0; i < stroka.length(); i++) {
+            char c = stroka.charAt(i);
             if (!Character.isDigit(c) && c != ' '){
                 return false;
             }
@@ -81,11 +84,11 @@ public class Solution {
         return true;
     }
 
-    private static boolean checkNumbers(String word)throws Exception{
-        if (word == null)
+    private static boolean checkNumbers(String stroka)throws Exception{
+        if (stroka == null)
             throw new Exception("Not text");
 
-        String[] digit = word.trim().split(" ");
+        String[] digit = stroka.split(" ");
 
         if (digit.length != 10){
             return false;
