@@ -67,11 +67,16 @@ public class Solution {
         if (word == null)
             throw new Exception("Not text");
 
+        char previousChar = '.';
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
             if (!Character.isDigit(c) && c != ' '){
                 return false;
             }
+            if (c == ' ' && c == previousChar){
+                return false;
+            }
+            previousChar = c;
         }
         return true;
     }
@@ -80,23 +85,14 @@ public class Solution {
         if (word == null)
             throw new Exception("Not text");
 
-        ArrayList<String> numbers = new ArrayList<>();
         String[] digit = word.trim().split(" ");
 
-        int index = 0;
-        for (String s : digit) {
-            if (s != null){
-                numbers.add(s);
-            }
-            index++;
-        }
-
-        if (numbers.size() != 10){
+        if (digit.length != 10){
             return false;
         }
 
-        for (int i = 0; i < numbers.size(); i++) {
-            int x = Integer.parseInt(numbers.get(i));
+        for (int i = 0; i < digit.length; i++) {
+            int x = Integer.parseInt(digit[i]);
             if (x > 100) {
                 return false;
             }
