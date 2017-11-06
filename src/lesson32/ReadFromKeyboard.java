@@ -41,10 +41,10 @@ public class ReadFromKeyboard {
 
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
-            if (Character.isLetter(c)){
-                return true;
+            if (!Character.isLetter(c)){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
