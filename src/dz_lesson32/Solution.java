@@ -25,78 +25,51 @@ public class Solution {
         BufferedReader br = new BufferedReader(reader);
 
         int sum = 0;
-        int countErrors = 0;
-        int maxErrors = 3;
+        int countErrors = 3;
 
-        while (countErrors < 3){
+        while (countErrors > 0){
             System.out.println("Enter ten numbers from 1 to 100");
 
             String str = br.readLine();
 
-            if (checkDigital(str) && checkNumbers(str)){
-                ArrayList<String> numbers = new ArrayList<>();
-                String[] word = str.split(" ");
+            if (checkInput(str)){
+                String[] numbers = str.split(" ");
 
-                int index = 0;
-                for (String s : word) {
-                    if (s != null){
-                        numbers.add(s);
-                    }
-                    index++;
-                }
-
-                for (int i = 0; i < numbers.size(); i++) {
-                    int x = Integer.parseInt(numbers.get(i));
+                for (String number : numbers) {
+                    int x = Integer.parseInt(number);
                     sum += x;
                 }
                 System.out.println("Sum of entered numbers: " + sum);
                 break;
             }
-            else
-                {
-                countErrors++;
-                int n = maxErrors - countErrors;
-                if (n == 0){
+
+            if (!checkInput(str)) {
+                countErrors--;
+                if (countErrors == 0){
                     System.out.println("Your numbers are wrong. Number of attempts exceeded");
                 }
                 else {
-                    System.out.println("Your numbers are wrong. You have " + n + " attempts to try again");
+                    System.out.println("Your numbers are wrong. You have " + countErrors + " attempts to try again");
                 }
             }
         }
     }
 
-    private static boolean checkDigital(String stroka)throws Exception{
-        if (stroka == null)
-            throw new Exception("Not text");
+    private static boolean checkInput(String input){
+        String[] numbers = input.split(" ");
 
-        char previousChar = '.';
-        for (int i = 0; i < stroka.length(); i++) {
-            char c = stroka.charAt(i);
-            if (!Character.isDigit(c) && c != ' '){
-                return false;
-            }
-            if (c == ' ' && c == previousChar){
-                return false;
-            }
-            previousChar = c;
-        }
-        return true;
-    }
-
-    private static boolean checkNumbers(String stroka)throws Exception{
-        if (stroka == null)
-            throw new Exception("Not text");
-
-        String[] digit = stroka.split(" ");
-
-        if (digit.length != 10){
+        if (numbers.length != 10){
             return false;
         }
 
-        for (int i = 0; i < digit.length; i++) {
-            int x = Integer.parseInt(digit[i]);
-            if (x > 100) {
+        for (String number : numbers) {
+            for (char ch : number.toCharArray()) {
+                if (!Character.isDigit(ch)){
+                    return false;
+                }
+            }
+            int x = Integer.parseInt(number);
+            if (x > 100){
                 return false;
             }
         }
