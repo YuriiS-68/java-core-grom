@@ -46,7 +46,7 @@ public class ReadWriteFile {
             bufferedWriter.append("\n");
             bufferedWriter.append(content);
         }catch (IOException e){
-            System.err.println("Can`t write to file");
+            System.err.println("Can not write to file");
             return;
         }
         finally {
