@@ -8,7 +8,7 @@ public class ReadWriteFile {
     public static void main(String[] args)throws InterruptedException {
 
         readFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt");
-        writeFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt");
+        writeFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt", "HELLO !");
 
     }
 
@@ -34,7 +34,7 @@ public class ReadWriteFile {
         }
     }
 
-    private static void writeFile(String path)throws InterruptedException{
+    private static void writeFile(String path, String content)throws InterruptedException{
         FileWriter writer = null;
         BufferedWriter bufferedWriter = null;
 
@@ -44,7 +44,7 @@ public class ReadWriteFile {
             bufferedWriter = new BufferedWriter(writer);
 
             bufferedWriter.append("\n");
-            bufferedWriter.append("TTTTTT");
+            bufferedWriter.append(content);
         }catch (IOException e){
             System.err.println("Can`t write to file");
             return;
