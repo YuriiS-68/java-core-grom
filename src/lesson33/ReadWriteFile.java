@@ -1,18 +1,16 @@
 package lesson33;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.*;
 
 public class ReadWriteFile {
-    public static void main(String[] args)throws InterruptedException {
+    public static void main(String[] args) {
 
-        readFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt");
-        writeFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt", "HELLO !");
+        //readFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt");
+        //writeFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt", "HELLO !");
 
     }
 
-    private static void readFile(String path){
+    public static void readFile(String path){
         FileReader reader;
         try {
             reader = new FileReader(path);
@@ -29,12 +27,16 @@ public class ReadWriteFile {
         } catch (IOException e) {
             System.err.println("Reading from file " + path + " failed");
         } finally {
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(br);
+            try {
+                reader.close();
+                br.close();
+            }catch (IOException e){
+                System.err.println("Closing streams failed");
+            }
         }
     }
 
-    private static void writeFile(String path, String content)throws InterruptedException{
+    public static void writeFile(String path, String content){
         FileWriter writer = null;
         BufferedWriter bufferedWriter = null;
 
@@ -47,11 +49,18 @@ public class ReadWriteFile {
             bufferedWriter.append(content);
         }catch (IOException e){
             System.err.println("Can not write to file");
-            return;
         }
         finally {
-            IOUtils.closeQuietly(bufferedWriter);
-            IOUtils.closeQuietly(writer);
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                }
+            }catch (IOException e){
+                System.err.println("Closing streams failed");
+            }
         }
     }
 }
