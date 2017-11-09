@@ -1,9 +1,16 @@
 package dz_lesson33;
 
+import java.io.IOException;
+
 public class Demo {
 
     public static void main(String[] args) {
 
-        WriteToFile.writeToFileFromConsole("C:\\Users\\Skorodielov\\Desktop\\Test.txt");
+        //WriteToFile.writeToFileFromConsole("C:\\Users\\Skorodielov\\Desktop\\Test.txt");
+        try {
+            WriteToFile.readFileByConsolePath();
+        }catch (IOException e){
+            System.out.println("Closing streams failed");
+        }
     }
 }

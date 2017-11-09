@@ -43,4 +43,49 @@ public class WriteToFile {
             }
         }
     }
+
+    public static void readFileByConsolePath()throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("Please, enter file path to enter:");
+
+        try {
+            String line = br.readLine();
+            readFile(line);
+        }catch (IOException e){
+            System.out.println("Can't read file by path" + br.readLine());
+        }finally {
+            try {
+                br.close();
+            }catch (IOException e){
+                System.out.println("Closing streams failed");
+            }
+        }
+    }
+
+    private static void readFile(String path){
+        FileReader reader;
+        try {
+            reader = new FileReader(path);
+        }catch (FileNotFoundException e){
+            System.err.println("File with path " + path + " not found");
+            return;
+        }
+
+        BufferedReader br = new BufferedReader(reader);
+        try {
+            String line;
+            while ((line = br.readLine()) != null)
+                System.out.println(line);
+        } catch (IOException e) {
+            System.err.println("Reading from file " + path + " failed");
+        } finally {
+            try {
+                reader.close();
+                br.close();
+            }catch (IOException e){
+                System.err.println("Closing streams failed");
+            }
+        }
+    }
 }

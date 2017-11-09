@@ -5,7 +5,7 @@ import java.io.*;
 public class ReadWriteFile {
     public static void main(String[] args) {
 
-        //readFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt");
+        readFile("C:\\Users\\Skorodielov\\Desktop\\Test.txt");
         //writeFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt", "HELLO !");
 
     }
@@ -52,11 +52,11 @@ public class ReadWriteFile {
         }
         finally {
             try {
-                if (writer != null) {
-                    writer.close();
-                }
                 if (bufferedWriter != null) {
                     bufferedWriter.close();
+                }
+                if (writer != null) {
+                    writer.close();
                 }
             }catch (IOException e){
                 System.err.println("Closing streams failed");

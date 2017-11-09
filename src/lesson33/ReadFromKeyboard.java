@@ -52,8 +52,12 @@ public class ReadFromKeyboard {
         } catch (IOException e) {
             System.err.println("Reading from keyboard failed");
         } finally {
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(br);
+            try {
+                reader.close();
+                br.close();
+            }catch (IOException e){
+                System.err.println("Closing streams failed");
+            }
         }
     }
 
