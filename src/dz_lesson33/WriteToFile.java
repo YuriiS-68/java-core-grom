@@ -16,16 +16,14 @@ public class WriteToFile {
 
         try {
             String line;
+            String result = "";
             writer = new FileWriter(path, true);
             bufferedWriter = new BufferedWriter(writer);
 
-            do {
-                line = br.readLine();
-
-                bufferedWriter.append("\n");
-                bufferedWriter.append(line);
+            while ((line = br.readLine()) != null && (!(line.equals("wr")))){
+                result += line.concat("\n");
             }
-            while (!line.equals("wr"));
+            bufferedWriter.append("\n").append(result.trim());
         }catch (IOException e){
             System.err.println("Can't write to file with path " + path);
         }

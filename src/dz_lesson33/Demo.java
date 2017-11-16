@@ -6,7 +6,7 @@ public class Demo {
 
     public static void main(String[] args) {
 
-            WriteToFile.writeToFileFromConsole("C:\\Users\\Skorodielov\\Desktop\\Test2.txt");
+            WriteToFile.writeToFileFromConsole("C:\\Users\\Skorodielov\\Desktop\\Test3.txt");
 
         /*try {
             WriteToFile.readFileByConsolePath();
