@@ -5,8 +5,8 @@ import java.io.*;
 public class ReadWriteFile {
     public static void main(String[] args) {
 
-        readFile("C:\\Users\\Skorodielov\\Desktop\\Test.txt");
-        //writeFile("C:\\Users\\Skorodielov\\Desktop\\Test1.txt", "HELLO !");
+        //readFile("C:\\Users\\Skorodielov\\Desktop\\Test2.txt");
+        writeFile("C:\\Users\\Skorodielov\\Desktop\\Test2.txt", "HELLO 2 !");
 
     }
 
