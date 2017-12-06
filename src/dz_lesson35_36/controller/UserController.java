@@ -9,6 +9,8 @@ public class UserController {
     private UserService userService = new UserService();
 
     public User registerUser(User user)throws Exception{
+        if (user == null)
+            throw new BadRequestException("This " + user + " is not exist");
 
         return userService.registerUser(user);
     }
