@@ -14,4 +14,6 @@ public class HotelService {
 
         return hotelDAO.addHotel(hotel);
     }
+
+
 }
