@@ -1,21 +1,19 @@
 package dz_lesson35_36.dao;
 
 import dz_lesson35_36.exception.BadRequestException;
+import dz_lesson35_36.model.Filter;
 import dz_lesson35_36.model.Hotel;
 import dz_lesson35_36.model.Room;
-import javafx.scene.input.DataFormat;
-import javafx.util.converter.DateStringConverter;
-import sun.util.calendar.BaseCalendar;
-import sun.util.calendar.LocalGregorianCalendar;
 
-import javax.xml.crypto.Data;
-import java.awt.image.DataBuffer;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class RoomDAO {
+
+    private static String pathToHotelDB = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
 
     public static Room addRoom(Room room)throws Exception{
         if (room == null)
@@ -32,7 +30,7 @@ public class RoomDAO {
 
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))){
             bufferedWriter.append(Long.toString(room.getId())).append(",");
-            bufferedWriter.append(Integer.toString((int)room.getNumberOfGuests())).append(",");
+            bufferedWriter.append(Integer.toString(room.getNumberOfGuests())).append(",");
             bufferedWriter.append(Double.toString(room.getPrice())).append(",");
             bufferedWriter.append(Boolean.toString(room.isBreakfastIncluded())).append(",");
             bufferedWriter.append(Boolean.toString(room.isPetsAllowed())).append(",");
@@ -81,6 +79,80 @@ public class RoomDAO {
         }
     }
 
+    public static Collection findRooms(Filter filter)throws Exception{
+        if (filter == null)
+            throw new BadRequestException("This filter - " + filter + " does not exist." );
+
+        final String PATH;
+        PATH = "C:\\Users\\Skorodielov\\Desktop\\RoomDB.txt";
+
+        LinkedList<Room> rooms = new LinkedList<>();
+
+        LinkedList<Hotel> hotels = new LinkedList<>();
+
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+        if (filter.equals(filter.getNumberOfGuests()) && filter.equals(filter.getPrice()) && filter.equals(filter.isBreakfastIncluded())){
+            if (filter.equals(filter.isPetsAllowed()) && filter.equals(filter.getDateAvailableFrom())){
+                if (filter.equals(filter.getCountry()) && filter.equals(filter.getCity())){
+                    try (BufferedReader br = new BufferedReader(new FileReader(PATH))){
+                        String line;
+
+                        while ((line = br.readLine()) != null){
+                            String[] result = line.split("\n");
+                            int index = 0;
+                            for (String el : result){
+                                if (el != null){
+                                    String[] fields = el.split(",");
+                                    Room room = new Room();
+                                    room.setNumberOfGuests(Integer.parseInt(fields[1]));
+                                    room.setPrice(Double.parseDouble(fields[2]));
+                                    room.setBreakfastIncluded(Boolean.parseBoolean(fields[3]));
+                                    room.setPetsAllowed(Boolean.parseBoolean(fields[4]));
+                                    room.setDateAvailableFrom(format.parse(fields[5]));
+                                    try(BufferedReader br2 = new BufferedReader(new FileReader(pathToHotelDB))) {
+                                        String line2;
+
+                                        while ((line2 = br2.readLine()) != null){
+                                            String[] result2 = line2.split("\n");
+                                            int index2 = 0;
+                                            for (String el2 : result2){
+                                                if (el2 != null){
+                                                    String[] fields2 = el2.split(",");
+                                                    Hotel hotel = new Hotel();
+                                                    if (hotel.getCountry().equals(filter.getCountry()) && hotel.getCity().equals(filter.getCity())){
+                                                        hotel.setCountry(fields2[1]);
+                                                        hotel.setCity(fields2[2]);
+                                                        hotels.add(hotel);
+                                                    }
+                                                }
+                                                index2++;
+                                            }
+                                        }
+                                    }
+                                    //room.setHotel();
+                                    rooms.add(room);
+                                }
+                                index++;
+                            }
+                        }
+                    } catch (FileNotFoundException e){
+                        throw new FileNotFoundException("File does not exist");
+                    } catch (IOException e) {
+                        throw new IOException("Reading from file " + PATH + " failed");
+                    }
+                }
+            }
+        }
+        return rooms;
+    }
+
+    public static void bookRoom(long roomId, long userId, long hotelId)throws Exception{
+        if (roomId == 0 || userId == 0 || hotelId == 0)
+            throw new BadRequestException("Data not valid");
+
+
+    }
 
     private static boolean checkRoom(String path, Room room)throws Exception{
 

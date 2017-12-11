@@ -14,6 +14,9 @@ public class Room {
     private Date dateAvailableFrom;
     private Hotel hotel;
 
+    public Room() {
+    }
+
     public Room(long id, int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, Hotel hotel) {
         this.id = id;
         this.numberOfGuests = numberOfGuests;

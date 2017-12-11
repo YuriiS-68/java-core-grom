@@ -7,12 +7,17 @@ public class Hotel {
     private String country;
     private String city;
     private String street;
+    private String name;
 
-    public Hotel(long id, String country, String city, String street) {
+    public Hotel() {
+    }
+
+    public Hotel(long id, String country, String city, String street, String name) {
         this.id = id;
         this.country = country;
         this.city = city;
         this.street = street;
+        this.name = name;
     }
 
     @Override
@@ -20,15 +25,17 @@ public class Hotel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hotel hotel = (Hotel) o;
-        return Objects.equals(country, hotel.country) &&
+        return id == hotel.id &&
+                Objects.equals(country, hotel.country) &&
                 Objects.equals(city, hotel.city) &&
-                Objects.equals(street, hotel.street);
+                Objects.equals(street, hotel.street) &&
+                Objects.equals(name, hotel.name);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(country, city, street);
+        return Objects.hash(id, country, city, street, name);
     }
 
     public long getId() {
@@ -63,6 +70,14 @@ public class Hotel {
         this.street = street;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "Hotel{" +
@@ -70,6 +85,7 @@ public class Hotel {
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
