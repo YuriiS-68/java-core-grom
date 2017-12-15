@@ -3,6 +3,7 @@ package dz_lesson35_36.model;
 import java.util.Date;
 
 public class Filter {
+    private long id;
     private int numberOfGuests;
     private double price;
     private boolean breakfastIncluded;
@@ -15,8 +16,30 @@ public class Filter {
 
     }
 
+    public Filter(int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, String country, String city) {
+        this.numberOfGuests = numberOfGuests;
+        this.price = price;
+        this.breakfastIncluded = breakfastIncluded;
+        this.petsAllowed = petsAllowed;
+        this.dateAvailableFrom = dateAvailableFrom;
+        this.country = country;
+        this.city = city;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public int getNumberOfGuests() {
         return numberOfGuests;
+    }
+
+    public void setNumberOfGuests(int numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
     }
 
     public double getPrice() {
@@ -70,6 +93,7 @@ public class Filter {
     @Override
     public String toString() {
         return "Filter{" +
+                "id=" + id +
                 "numberOfGuests=" + numberOfGuests +
                 ", price=" + price +
                 ", breakfastIncluded=" + breakfastIncluded +

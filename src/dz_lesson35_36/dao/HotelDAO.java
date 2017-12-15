@@ -4,10 +4,11 @@ import dz_lesson35_36.exception.BadRequestException;
 import dz_lesson35_36.model.Hotel;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class HotelDAO {
+
+    private static final String PATH_HOTEL_DB = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
 
     public static Hotel addHotel(Hotel hotel)throws Exception{
         //проверить по id есть ли такой отель в файле
@@ -15,13 +16,10 @@ public class HotelDAO {
         if (hotel == null)
             throw new BadRequestException("This " + hotel + " is not exist");
 
-        final String PATH;
-        PATH = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
-
-        if (checkHotel(PATH, hotel))
+        if (checkHotel(PATH_HOTEL_DB, hotel))
             throw new BadRequestException("Hotel with id " + hotel.getId() + " already exists");
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))){
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_HOTEL_DB, true))){
             bufferedWriter.append(Long.toString(hotel.getId())).append(",");
             bufferedWriter.append(hotel.getCountry()).append(",");
             bufferedWriter.append(hotel.getCity()).append(",");
@@ -29,7 +27,7 @@ public class HotelDAO {
             bufferedWriter.append(hotel.getName());
             bufferedWriter.append("\n");
         }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH);
+            throw new IOException("Can not write to file " + PATH_HOTEL_DB);
         }
         return hotel;
     }
@@ -42,11 +40,8 @@ public class HotelDAO {
         if (hotel == null)
             throw new BadRequestException("This " + hotel + " is not exist");
 
-        final String PATH;
-        PATH = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
-
         StringBuffer res = new StringBuffer();
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH))){
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
             String line;
             String result = "";
             while ((line = br.readLine()) != null){
@@ -64,13 +59,13 @@ public class HotelDAO {
         } catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH + " failed");
+            throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
         }
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH))){
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_HOTEL_DB))){
             bufferedWriter.append(res);
         }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH);
+            throw new IOException("Can not write to file " + PATH_HOTEL_DB);
         }
     }
 
@@ -82,12 +77,9 @@ public class HotelDAO {
         if (name == null)
             throw new BadRequestException("This name - " + name + " does not exist." );
 
-        final String PATH;
-        PATH = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
-
         LinkedList<Hotel> hotels = new LinkedList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH))){
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
             String line;
 
             while ((line = br.readLine()) != null){
@@ -110,7 +102,7 @@ public class HotelDAO {
         } catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH + " failed");
+            throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
         }
         return hotels;
     }
@@ -123,12 +115,9 @@ public class HotelDAO {
         if (city == null)
             throw new BadRequestException("This city - " + city + " does not exist." );
 
-        final String PATH;
-        PATH = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
-
         LinkedList<Hotel> hotels = new LinkedList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH))){
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
             String line;
 
             while ((line = br.readLine()) != null){
@@ -151,7 +140,7 @@ public class HotelDAO {
         } catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH + " failed");
+            throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
         }
         return hotels;
     }
