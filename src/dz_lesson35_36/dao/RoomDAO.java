@@ -79,19 +79,16 @@ public class RoomDAO {
 
         LinkedList<Room> roomsFinish = new LinkedList<>();
 
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-
-                int index = 0;
-                for (Room el : findsRoomInFile(PATH_ROOM_DB)) {
-                    if (el.getNumberOfGuests() == filter.getNumberOfGuests() || el.getPrice() == filter.getPrice() || el.isBreakfastIncluded() == filter.isBreakfastIncluded()) {
-                        if (el.isPetsAllowed() == filter.isPetsAllowed() || el.getDateAvailableFrom() == filter.getDateAvailableFrom()) {
-                            if (el.getHotel().getCountry().equals(filter.getCountry()) || el.getHotel().getCity().equals(filter.getCity())){
-                                roomsFinish.add(el);
-                            }
-                        }
+        for (Room el : findsRoomInFile(PATH_ROOM_DB)) {
+            if (el.getNumberOfGuests() == filter.getNumberOfGuests() && el.getPrice() == filter.getPrice() && el.isBreakfastIncluded() == filter.isBreakfastIncluded()){
+                if (el.isPetsAllowed() == filter.isPetsAllowed() && el.getDateAvailableFrom() == filter.getDateAvailableFrom()) {
+                    if (el.getHotel().getCountry().equals(filter.getCountry()) && el.getHotel().getCity().equals(filter.getCity())){
+                        System.out.println(el);
+                        roomsFinish.add(el);
                     }
-                    index++;
                 }
+            }
+        }
         return roomsFinish;
     }
 
