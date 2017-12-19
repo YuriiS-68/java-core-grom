@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class UserDAO {
 
+    private static final String PATH_USER_DB = "C:\\Users\\Skorodielov\\Desktop\\UserDB.txt";
     //считывание данных - считывание файла
     //обработка данных - маппинг данных
     public static User registerUser(User user)throws Exception{
@@ -18,10 +19,7 @@ public class UserDAO {
         if (user == null)
             throw new BadRequestException("This user is not exist");
 
-        final String PATH;
-        PATH = "C:\\Users\\Skorodielov\\Desktop\\UserDB.txt";
-
-        if (checkValidLoginName(PATH, user.getUserName()))
+        if (checkValidLoginName(PATH_USER_DB, user.getUserName()))
             throw new BadRequestException("User with name " + user.getUserName() + " already exists");
 
         Random random = new Random();
@@ -30,7 +28,7 @@ public class UserDAO {
             user.setId(-1 * user.getId());
         }
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))){
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_USER_DB, true))){
             bufferedWriter.append(Long.toString(user.getId())).append(",");
             bufferedWriter.append(user.getUserName()).append(",");
             bufferedWriter.append(user.getPassword()).append(",");
@@ -38,7 +36,7 @@ public class UserDAO {
             bufferedWriter.append(user.getUserType().toString());
             bufferedWriter.append("\n");
         }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH);
+            throw new IOException("Can not write to file " + PATH_USER_DB);
         }
         return user;
     }
@@ -47,10 +45,7 @@ public class UserDAO {
         if (userName == null || password == null)
             throw new BadRequestException("Username or password is not exists");
 
-        final String PATH;
-        PATH = "C:\\Users\\Skorodielov\\Desktop\\UserDB.txt";
-
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH))){
+        try (BufferedReader br = new BufferedReader(new FileReader(PATH_USER_DB))){
             String line;
             String result = "";
             while ((line = br.readLine()) != null){

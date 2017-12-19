@@ -92,13 +92,6 @@ public class RoomDAO {
         return roomsFinish;
     }
 
-    public static void bookRoom(long roomId, long userId, long hotelId)throws Exception{
-        if (roomId == 0 || userId == 0 || hotelId == 0)
-            throw new BadRequestException("Data not valid");
-
-
-    }
-
     private static LinkedList<Room> findsRoomInFile(String path)throws Exception {
         if (path == null)
             throw new BadRequestException("This path to file - " + path + " does not exist.");

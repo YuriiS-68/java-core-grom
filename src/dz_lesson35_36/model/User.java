@@ -7,6 +7,10 @@ public class User {
     private String country;
     private UserType userType;
 
+    public User(){
+
+    }
+
     public User(String userName, String password, String country, UserType userType) {
         this.userName = userName;
         this.password = password;
