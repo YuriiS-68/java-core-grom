@@ -14,6 +14,7 @@ public class RoomDAO {
 
     private static final String PATH_HOTEL_DB = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
     private static final String PATH_ROOM_DB = "C:\\Users\\Skorodielov\\Desktop\\RoomDB.txt";
+    private static final DateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     public static Room addRoom(Room room)throws Exception{
         if (room == null)
@@ -22,8 +23,7 @@ public class RoomDAO {
         if (checkRoom(PATH_ROOM_DB, room))
             throw new BadRequestException("Room with id " + room.getId() + " already exists");
 
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        String date = format.format(room.getDateAvailableFrom());
+        String date = FORMAT.format(room.getDateAvailableFrom());
 
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_ROOM_DB, true))){
             bufferedWriter.append(Long.toString(room.getId())).append(",");
@@ -40,30 +40,20 @@ public class RoomDAO {
         return room;
     }
 
-    public static void deleteRoom(Room room)throws Exception{
-        if (room == null)
-            throw new BadRequestException("This " + room + " is not exist");
+    public static void deleteRoom(Long idRoom)throws Exception{
+        if (idRoom == null)
+            throw new BadRequestException("This id " + idRoom + " is not exist");
 
         StringBuffer res = new StringBuffer();
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH_ROOM_DB))){
-            String line;
-            String result = "";
-            while ((line = br.readLine()) != null){
-                result += line.concat("\n");
+
+        String[] lines = readingFromFile(PATH_ROOM_DB).split("\n");
+        int index = 0;
+        for (String str : lines) {
+            if (str != null && !str.equals(Long.toString(idRoom))){
+                res.append(str);
+                res.append("\n");
             }
-            String[] lines = result.split("\n");
-            int index = 0;
-            for (String str : lines) {
-                if (str != null && !str.contains(Long.toString(room.getId()))){
-                    res.append(str);
-                    res.append("\n");
-                }
-                index++;
-            }
-        } catch (FileNotFoundException e){
-            throw new FileNotFoundException("File does not exist");
-        } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH_ROOM_DB + " failed");
+            index++;
         }
 
         try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_ROOM_DB))){
@@ -77,19 +67,20 @@ public class RoomDAO {
         if (filter == null)
             throw new BadRequestException("This filter - " + filter + " does not exist." );
 
-        LinkedList<Room> roomsFinish = new LinkedList<>();
+        LinkedList<Room> foundRooms = new LinkedList<>();
 
         for (Room el : findsRoomInFile(PATH_ROOM_DB)) {
-            if (el.getNumberOfGuests() == filter.getNumberOfGuests() && el.getPrice() == filter.getPrice() && el.isBreakfastIncluded() == filter.isBreakfastIncluded()){
-                if (el.isPetsAllowed() == filter.isPetsAllowed() && el.getDateAvailableFrom() == filter.getDateAvailableFrom()) {
-                    if (el.getHotel().getCountry().equals(filter.getCountry()) && el.getHotel().getCity().equals(filter.getCity())){
-                        System.out.println(el);
-                        roomsFinish.add(el);
+            if (el.getNumberOfGuests() == filter.getNumberOfGuests() || filter.getNumberOfGuests() == 0 && el.getPrice() == filter.getPrice() || filter.getPrice() == 0){
+                if (el.getDateAvailableFrom().compareTo(filter.getDateAvailableFrom()) >= 0 || filter.getDateAvailableFrom() == null) {
+                    if (el.isPetsAllowed() == filter.isPetsAllowed() && el.isBreakfastIncluded() == filter.isBreakfastIncluded()) {
+                        if (el.getHotel().getCountry().equals(filter.getCountry()) || filter.getCountry() == null && el.getHotel().getCity().equals(filter.getCity()) || filter.getCity() == null) {
+                            foundRooms.add(el);
+                        }
                     }
                 }
             }
         }
-        return roomsFinish;
+        return foundRooms;
     }
 
     private static LinkedList<Room> findsRoomInFile(String path)throws Exception {
@@ -98,11 +89,12 @@ public class RoomDAO {
 
         LinkedList<Room> rooms = new LinkedList<>();
 
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
+            int countLine = 0;
             while ((line = br.readLine()) != null) {
+                countLine++;
+                checkLine(line, countLine, checkLength(path));
                 String[] fields = line.split(",");
                 Room room = new Room();
                 room.setId(Long.parseLong(fields[0]));
@@ -110,7 +102,7 @@ public class RoomDAO {
                 room.setPrice(Double.parseDouble(fields[2]));
                 room.setBreakfastIncluded(Boolean.parseBoolean(fields[3]));
                 room.setPetsAllowed(Boolean.parseBoolean(fields[4]));
-                room.setDateAvailableFrom(format.parse(fields[5]));
+                room.setDateAvailableFrom(FORMAT.parse(fields[5]));
                 String idHotel = "";
                 for (Character ch : fields[6].toCharArray()) {
                     if (ch != null && Character.isDigit(ch)) {
@@ -120,6 +112,10 @@ public class RoomDAO {
                 room.setHotel(findHotelById(Long.parseLong(idHotel)));
                 rooms.add(room);
             }
+        }catch (FileNotFoundException e){
+            throw new FileNotFoundException("File does not exist");
+        } catch (IOException e) {
+            throw new IOException("Reading from file " + path + " failed");
         }
         return rooms;
     }
@@ -132,7 +128,10 @@ public class RoomDAO {
 
         try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
             String line;
+            int countLine = 0;
             while ((line = br.readLine()) != null){
+                countLine++;
+                checkLine(line, countLine, checkLength(PATH_HOTEL_DB));
                 String[] result = line.split("\n");
                 int index = 0;
                 for (String el : result){
@@ -140,11 +139,13 @@ public class RoomDAO {
                         String[] fields = el.split(",");
                         Hotel hotel = new Hotel();
                         hotel.setId(Long.parseLong(fields[0]));
-                        hotel.setCountry(fields[1]);
-                        hotel.setCity(fields[2]);
-                        hotel.setStreet(fields[3]);
-                        hotel.setName(fields[4]);
-                        hotels.add(hotel);
+                        if (hotel.getId() == id) {
+                            hotel.setCountry(fields[1]);
+                            hotel.setCity(fields[2]);
+                            hotel.setStreet(fields[3]);
+                            hotel.setName(fields[4]);
+                            hotels.add(hotel);
+                        }
                     }
                     index++;
                 }
@@ -154,37 +155,82 @@ public class RoomDAO {
         } catch (IOException e) {
             throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
         }
-
-        for (Hotel el : hotels){
-            if (el.getId() == id){
-                hotels.add(el);
-                break;
-            }
-        }
         return hotels.getFirst();
     }
 
     private static boolean checkRoom(String path, Room room)throws Exception{
+        if (path == null || room == null)
+            throw new BadRequestException("Invalid incoming data");
 
+        String[] words = readingFromFile(path).split(",");
+        int index = 0;
+        for (String word : words) {
+            if (word != null && word.equals(Long.toString(room.getId()))){
+                return true;
+            }
+            index++;
+        }
+        return false;
+    }
+
+    private static String readingFromFile(String path)throws Exception{
+        if(path == null)
+            throw new BadRequestException("This path " + path + " is not exists");
+
+        String result = "";
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
             String line;
-            String result = "";
+
+            int countLine = 0;
             while ((line = br.readLine()) != null){
+                countLine++;
+                checkLine(line, countLine, checkLength(path));
                 result += line.concat("\n");
             }
-            String[] words = result.split(",");
-            int index = 0;
-            for (String word : words) {
-                if (word != null && word.contains(Long.toString(room.getId()))){
-                    return true;
-                }
-                index++;
-            }
-        } catch (FileNotFoundException e){
+        }catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
             throw new IOException("Reading from file " + path + " failed");
         }
-        return false;
+        return result;
+    }
+
+    private static void checkLine(String line, int count, int lengthArray)throws Exception{
+        //проверить чтобы строка была не пустая
+        //проверить чтобы начиналась с цифрового символа
+        //проверить чтобы длина массива была 5
+        if (line == null)
+            throw new BadRequestException("Invalid incoming data");
+
+        if (line.isEmpty())
+            throw new BadRequestException("The line " + count + " nothing contains");
+
+        String[] arrayLine = line.split(",");
+
+        if (!checkArrayLine(arrayLine))
+            throw new BadRequestException("In this line " + count + " an error in the column id");
+
+        if (arrayLine.length != lengthArray)
+            throw new BadRequestException("The line " + count + " contains " + arrayLine.length + " columns in the table.");
+    }
+
+    private static int checkLength(String path){
+        int arrayLength = 0;
+        if (path.equals(PATH_HOTEL_DB)){
+            arrayLength = 5;
+        }
+        if(path.equals(PATH_ROOM_DB)){
+            arrayLength = 11;
+        }
+        return arrayLength;
+    }
+
+    private static boolean checkArrayLine(String[] arrayLine){
+        for (Character ch : arrayLine[0].toCharArray()){
+            if (ch != null && !Character.isDigit(ch)){
+                return false;
+            }
+        }
+        return true;
     }
 }

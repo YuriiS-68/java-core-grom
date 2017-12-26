@@ -22,8 +22,10 @@ public class UserDAO {
         if (checkValidLoginName(PATH_USER_DB, user.getUserName()))
             throw new BadRequestException("User with name " + user.getUserName() + " already exists");
 
+        checkingReadFile(PATH_USER_DB);
+
         Random random = new Random();
-        user.setId(random.nextLong());
+        user.setId(random.nextLong() / 1000000000000L);
         if (user.getId() < 0){
             user.setId(-1 * user.getId());
         }
@@ -41,25 +43,88 @@ public class UserDAO {
         return user;
     }
 
-    public static void login(String userName, String password)throws Exception{
+    public static void login(String userName, String password)throws Exception {
         if (userName == null || password == null)
             throw new BadRequestException("Username or password is not exists");
 
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH_USER_DB))){
-            String line;
-            String result = "";
-            while ((line = br.readLine()) != null){
-                result += line.concat("\n");
-            }
-            String[] lines = result.split(",");
-            for (String el : lines){
-                if (el != null && el.contains(userName) && el.contains(password)){
+        String[] lines = readingFromFile(PATH_USER_DB).split(",");
+        for (String el : lines) {
+            if (el != null && el.contains(userName) && el.contains(password)) {
 
-                }
             }
         }
+    }
 
+    private static String readingFromFile(String path)throws Exception{
+        if(path == null)
+            throw new BadRequestException("This path " + path + " is not exists");
 
+        String result = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))){
+            String line;
+
+            int countLine = 0;
+            while ((line = br.readLine()) != null){
+                countLine++;
+                checkLine(line, countLine);
+                result += line.concat("\n");
+            }
+        }catch (FileNotFoundException e){
+            throw new FileNotFoundException("File does not exist");
+        } catch (IOException e) {
+            throw new IOException("Reading from file " + path + " failed");
+        }
+        return result;
+    }
+
+    private static void checkingReadFile(String path)throws Exception{
+        if(path == null)
+            throw new BadRequestException("This path " + path + " is not exists");
+
+        String result = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))){
+            String line;
+
+            int countLine = 0;
+            while ((line = br.readLine()) != null){
+                countLine++;
+                checkLine(line, countLine);
+                result += line.concat("\n");
+            }
+        }catch (FileNotFoundException e){
+            throw new FileNotFoundException("File does not exist");
+        } catch (IOException e) {
+            throw new IOException("Reading from file " + path + " failed");
+        }
+    }
+
+    private static boolean checkLine(String line, int count)throws Exception{
+        //проверить чтобы строка была не пустая
+        //проверить чтобы начиналась с цифрового символа
+        //проверить чтобы длина массива была 5
+        if (line == null)
+            throw new BadRequestException("Invalid incoming data");
+
+        if (line.isEmpty())
+            throw new BadRequestException("The line " + count + " nothing contains");
+
+        String[] arrayLine = line.split(",");
+        if (!checkArrayLine(arrayLine))
+            throw new BadRequestException("In this line " + count + " an error in the column id");
+
+        if (arrayLine.length != 5)
+            throw new BadRequestException("The line " + count + " contains " + arrayLine.length + " columns in the table.");
+
+        return true;
+    }
+
+    private static boolean checkArrayLine(String[] arrayLine){
+        for (Character ch : arrayLine[0].toCharArray()){
+            if (ch != null && !Character.isDigit(ch)){
+                return false;
+            }
+        }
+        return true;
     }
 
     private static boolean checkValidLoginName(String path, String loginName)throws Exception{
