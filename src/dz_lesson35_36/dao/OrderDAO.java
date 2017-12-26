@@ -205,7 +205,7 @@ public class OrderDAO {
                 checkLine(line, countLine, checkLength(path));
                 String[] result = line.split(",");
                 for (String el : result){
-                    if (el != null && !el.contains(id.toString())){
+                    if (el != null && !el.equals(id.toString())){
                         return false;
                     }
                 }
@@ -275,6 +275,27 @@ public class OrderDAO {
         return result;
     }
 
+    private static void checkingReadFile(String path)throws Exception{
+        if(path == null)
+            throw new BadRequestException("This path " + path + " is not exists");
+
+        String result = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))){
+            String line;
+
+            int countLine = 0;
+            while ((line = br.readLine()) != null){
+                countLine++;
+                checkLine(line, countLine, checkLength(path));
+                result += line.concat("\n");
+            }
+        }catch (FileNotFoundException e){
+            throw new FileNotFoundException("File does not exist");
+        } catch (IOException e) {
+            throw new IOException("Reading from file " + path + " failed");
+        }
+    }
+
     private static void checkLine(String line, int count, int lengthArray)throws Exception{
         //проверить чтобы строка была не пустая
         //проверить чтобы начиналась с цифрового символа
@@ -282,7 +303,7 @@ public class OrderDAO {
         if (line == null)
             throw new BadRequestException("Invalid incoming data");
 
-        if (line.isEmpty())
+        if (count != 0 && line.isEmpty())
             throw new BadRequestException("The line " + count + " nothing contains");
 
         String[] arrayLine = line.split(",");
@@ -295,14 +316,17 @@ public class OrderDAO {
 
     private static int checkLength(String path){
         int arrayLength = 0;
-        if (path.equals(PATH_HOTEL_DB) || path.equals(PATH_USER_DB)){
-            arrayLength = 5;
-        }
-        if(path.equals(PATH_ROOM_DB)){
-            arrayLength = 11;
-        }
-        if (path.equals(PATH_ORDER_DB)){
-            arrayLength = 16;
+        switch (path) {
+            case PATH_HOTEL_DB:
+            case PATH_USER_DB:
+                arrayLength = 5;
+                break;
+            case PATH_ROOM_DB:
+                arrayLength = 11;
+                break;
+            case PATH_ORDER_DB:
+                arrayLength = 16;
+                break;
         }
         return arrayLength;
     }

@@ -202,7 +202,7 @@ public class RoomDAO {
         if (line == null)
             throw new BadRequestException("Invalid incoming data");
 
-        if (line.isEmpty())
+        if (count != 0 && line.isEmpty())
             throw new BadRequestException("The line " + count + " nothing contains");
 
         String[] arrayLine = line.split(",");
@@ -216,11 +216,13 @@ public class RoomDAO {
 
     private static int checkLength(String path){
         int arrayLength = 0;
-        if (path.equals(PATH_HOTEL_DB)){
-            arrayLength = 5;
-        }
-        if(path.equals(PATH_ROOM_DB)){
-            arrayLength = 11;
+        switch (path) {
+            case PATH_HOTEL_DB:
+                arrayLength = 5;
+                break;
+            case PATH_ROOM_DB:
+                arrayLength = 11;
+                break;
         }
         return arrayLength;
     }

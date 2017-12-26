@@ -210,7 +210,7 @@ public class HotelDAO {
         if (line == null)
             throw new BadRequestException("Invalid incoming data");
 
-        if (line.isEmpty())
+        if (count != 0 && line.isEmpty())
             throw new BadRequestException("The line " + count + " nothing contains");
 
         String[] arrayLine = line.split(",");

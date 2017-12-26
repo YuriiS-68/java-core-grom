@@ -98,14 +98,14 @@ public class UserDAO {
         }
     }
 
-    private static boolean checkLine(String line, int count)throws Exception{
+    private static void checkLine(String line, int count)throws Exception{
         //проверить чтобы строка была не пустая
         //проверить чтобы начиналась с цифрового символа
         //проверить чтобы длина массива была 5
         if (line == null)
             throw new BadRequestException("Invalid incoming data");
 
-        if (line.isEmpty())
+        if (count != 0 && line.isEmpty())
             throw new BadRequestException("The line " + count + " nothing contains");
 
         String[] arrayLine = line.split(",");
@@ -114,8 +114,6 @@ public class UserDAO {
 
         if (arrayLine.length != 5)
             throw new BadRequestException("The line " + count + " contains " + arrayLine.length + " columns in the table.");
-
-        return true;
     }
 
     private static boolean checkArrayLine(String[] arrayLine){
