@@ -56,11 +56,7 @@ public class RoomDAO {
             index++;
         }
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_ROOM_DB))){
-            bufferedWriter.append(res);
-        }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH_ROOM_DB);
-        }
+        writerInFailBD(PATH_ROOM_DB, res);
     }
 
     public static Collection findRooms(Filter filter)throws Exception{
@@ -225,6 +221,14 @@ public class RoomDAO {
                 break;
         }
         return arrayLength;
+    }
+
+    private static void writerInFailBD(String path, StringBuffer content)throws Exception{
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))){
+            bufferedWriter.append(content);
+        }catch (IOException e){
+            throw new IOException("Can not write to file " + path);
+        }
     }
 
     private static boolean checkArrayLine(String[] arrayLine){

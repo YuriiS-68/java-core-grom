@@ -9,6 +9,7 @@ import dz_lesson35_36.model.UserType;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -93,21 +94,32 @@ public class OrderDAO {
         String[] lines = readingFromFile(PATH_ORDER_DB).split("\n");
         int index = 0;
         for (String str : lines) {
-            if (str != null && str.contains(Long.toString(userId)) && str.contains(Long.toString(roomId))) {
-                str = "";
-            }
-            else {
-                res.append(str);
-                res.append("\n");
+            if (str != null) {
+                String[] fields = str.split(",");
+                String idUser = "";
+                String idRoom = "";
+                for (Character ch : fields[1].toCharArray()) {
+                    if (ch != null && Character.isDigit(ch)) {
+                        idUser += ch;
+                    }
+                }
+                for (Character ch : fields[6].toCharArray()) {
+                    if (ch != null && Character.isDigit(ch)) {
+                        idRoom += ch;
+                    }
+                }
+                if (idUser.equals(Long.toString(userId)) && idRoom.equals(Long.toString(roomId))){
+                    str = "";
+                }
+                else {
+                    res.append(str);
+                    res.append("\n");
+                }
             }
             index++;
         }
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_ORDER_DB))){
-            bufferedWriter.append(res);
-        }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH_ORDER_DB);
-        }
+        writerInFailBD(PATH_ORDER_DB, res);
     }
 
     private static User findUserById(Long id)throws Exception{
@@ -329,6 +341,14 @@ public class OrderDAO {
                 break;
         }
         return arrayLength;
+    }
+
+    private static void writerInFailBD(String path, StringBuffer content)throws Exception{
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))){
+            bufferedWriter.append(content);
+        }catch (IOException e){
+            throw new IOException("Can not write to file " + path);
+        }
     }
 
     private static boolean checkArrayLine(String[] arrayLine){

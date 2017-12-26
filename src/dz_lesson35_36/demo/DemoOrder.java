@@ -30,7 +30,7 @@ public class DemoOrder {
 
         //System.out.println(OrderDAO.checkIdInOrderDB(PATH_ORDER_DB, 2002L));
 
-        OrderDAO.cancelReservation(3003, 2276818L);
+        OrderDAO.cancelReservation(1001, 7364205L);
 
 
     }

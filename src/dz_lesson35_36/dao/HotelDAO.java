@@ -54,11 +54,7 @@ public class HotelDAO {
             index++;
         }
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_HOTEL_DB))){
-            bufferedWriter.append(res);
-        }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH_HOTEL_DB);
-        }
+        writerInFailBD(PATH_HOTEL_DB, res);
     }
 
     public static LinkedList<Hotel> findHotelByName(String name)throws Exception{
@@ -203,7 +199,7 @@ public class HotelDAO {
         }
     }
 
-    private static boolean checkLine(String line, int count)throws Exception{
+    private static void checkLine(String line, int count)throws Exception{
         //проверить чтобы строка была не пустая
         //проверить чтобы начиналась с цифрового символа
         //проверить чтобы длина массива была 5
@@ -219,8 +215,14 @@ public class HotelDAO {
 
         if (arrayLine.length != 5)
             throw new BadRequestException("The line " + count + " contains " + arrayLine.length + " columns in the table.");
+    }
 
-        return true;
+    private static void writerInFailBD(String path, StringBuffer content)throws Exception{
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))){
+            bufferedWriter.append(content);
+        }catch (IOException e){
+            throw new IOException("Can not write to file " + path);
+        }
     }
 
     private static boolean checkArrayLine(String[] arrayLine){
