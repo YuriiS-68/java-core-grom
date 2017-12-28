@@ -2,13 +2,16 @@ package dz_lesson35_36.dao;
 
 import dz_lesson35_36.exception.BadRequestException;
 import dz_lesson35_36.model.User;
+import dz_lesson35_36.model.Utils;
 
 import java.io.*;
 import java.util.Random;
 
 public class UserDAO {
 
-    private static final String PATH_USER_DB = "C:\\Users\\Skorodielov\\Desktop\\UserDB.txt";
+    private static Utils utils = new Utils();
+    private static GeneralDAO generalDAO = new GeneralDAO();
+    //private static final String PATH_USER_DB = "C:\\Users\\Skorodielov\\Desktop\\UserDB.txt";
     //считывание данных - считывание файла
     //обработка данных - маппинг данных
     public static User registerUser(User user)throws Exception{
@@ -19,10 +22,11 @@ public class UserDAO {
         if (user == null)
             throw new BadRequestException("This user is not exist");
 
-        if (checkValidLoginName(PATH_USER_DB, user.getUserName()))
+        if (checkValidLoginName(utils.getPathUserDB(), user.getUserName()))
             throw new BadRequestException("User with name " + user.getUserName() + " already exists");
 
-        checkingReadFile(PATH_USER_DB);
+
+        generalDAO.checkingReadFile(utils.getPathUserDB());
 
         Random random = new Random();
         user.setId(random.nextLong() / 1000000000000L);
@@ -30,7 +34,7 @@ public class UserDAO {
             user.setId(-1 * user.getId());
         }
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_USER_DB, true))){
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(utils.getPathUserDB(), true))){
             bufferedWriter.append(Long.toString(user.getId())).append(",");
             bufferedWriter.append(user.getUserName()).append(",");
             bufferedWriter.append(user.getPassword()).append(",");
@@ -38,7 +42,7 @@ public class UserDAO {
             bufferedWriter.append(user.getUserType().toString());
             bufferedWriter.append("\n");
         }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH_USER_DB);
+            throw new IOException("Can not write to file " + utils.getPathUserDB());
         }
         return user;
     }
@@ -47,7 +51,7 @@ public class UserDAO {
         if (userName == null || password == null)
             throw new BadRequestException("Username or password is not exists");
 
-        String[] lines = readingFromFile(PATH_USER_DB).split(",");
+        String[] lines = generalDAO.readingFromFile(utils.getPathUserDB()).split(",");
         for (String el : lines) {
             if (el != null && el.contains(userName) && el.contains(password)) {
 
@@ -55,7 +59,23 @@ public class UserDAO {
         }
     }
 
-    private static String readingFromFile(String path)throws Exception{
+    private static boolean checkValidLoginName(String path, String loginName)throws Exception{
+        //считать данные из файла
+        //разбить строку на слова по запятым
+        //пройти по массиву слов и сравнить с введённым словом
+        String[] words = generalDAO.readingFromFile(path).split(",");
+        int index = 0;
+        for (String word : words) {
+            if (word != null && word.equals(loginName)){
+                return true;
+            }
+            index++;
+        }
+        return false;
+    }
+
+
+    /*private static String readingFromFile(String path)throws Exception{
         if(path == null)
             throw new BadRequestException("This path " + path + " is not exists");
 
@@ -75,9 +95,9 @@ public class UserDAO {
             throw new IOException("Reading from file " + path + " failed");
         }
         return result;
-    }
+    }*/
 
-    private static void checkingReadFile(String path)throws Exception{
+    /*private static void checkingReadFile(String path)throws Exception{
         if(path == null)
             throw new BadRequestException("This path " + path + " is not exists");
 
@@ -88,7 +108,7 @@ public class UserDAO {
             int countLine = 0;
             while ((line = br.readLine()) != null){
                 countLine++;
-                checkLine(line, countLine);
+                checkLine(line, countLine, checkLength(path));
                 result += line.concat("\n");
             }
         }catch (FileNotFoundException e){
@@ -96,9 +116,9 @@ public class UserDAO {
         } catch (IOException e) {
             throw new IOException("Reading from file " + path + " failed");
         }
-    }
+    }*/
 
-    private static void checkLine(String line, int count)throws Exception{
+    /*private static void checkLine(String line, int count)throws Exception{
         //проверить чтобы строка была не пустая
         //проверить чтобы начиналась с цифрового символа
         //проверить чтобы длина массива была 5
@@ -123,32 +143,5 @@ public class UserDAO {
             }
         }
         return true;
-    }
-
-    private static boolean checkValidLoginName(String path, String loginName)throws Exception{
-        //считать данные из файла
-        //разбить строку на слова по запятым
-        //пройти по массиву слов и сравнить с введённым словом
-        try (BufferedReader br = new BufferedReader(new FileReader(path))){
-            String line;
-            String result = "";
-            while ((line = br.readLine()) != null){
-                result += line.concat("\n");
-            }
-            String[] words = result.split(",");
-            int index = 0;
-            for (String word : words) {
-                if (word != null && word.equals(loginName)){
-                    return true;
-                }
-                index++;
-            }
-        } catch (FileNotFoundException e){
-            throw new FileNotFoundException("File does not exist");
-        } catch (IOException e) {
-            throw new IOException("Reading from file " + path + " failed");
-        }
-        return false;
-    }
-
+    }*/
 }

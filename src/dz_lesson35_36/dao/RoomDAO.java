@@ -4,6 +4,7 @@ import dz_lesson35_36.exception.BadRequestException;
 import dz_lesson35_36.model.Filter;
 import dz_lesson35_36.model.Hotel;
 import dz_lesson35_36.model.Room;
+import dz_lesson35_36.model.Utils;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -12,20 +13,20 @@ import java.util.*;
 
 public class RoomDAO {
 
-    private static final String PATH_HOTEL_DB = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
-    private static final String PATH_ROOM_DB = "C:\\Users\\Skorodielov\\Desktop\\RoomDB.txt";
+    private static Utils utils = new Utils();
+    private static GeneralDAO generalDAO = new GeneralDAO();
     private static final DateFormat FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     public static Room addRoom(Room room)throws Exception{
         if (room == null)
             throw new BadRequestException("This " + room + " is not exist");
 
-        if (checkRoom(PATH_ROOM_DB, room))
+        if (checkRoom(utils.getPathRoomDB(), room))
             throw new BadRequestException("Room with id " + room.getId() + " already exists");
 
         String date = FORMAT.format(room.getDateAvailableFrom());
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_ROOM_DB, true))){
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(utils.getPathRoomDB(), true))){
             bufferedWriter.append(Long.toString(room.getId())).append(",");
             bufferedWriter.append(Integer.toString(room.getNumberOfGuests())).append(",");
             bufferedWriter.append(Double.toString(room.getPrice())).append(",");
@@ -35,7 +36,7 @@ public class RoomDAO {
             bufferedWriter.append(room.getHotel().toString());
             bufferedWriter.append("\n");
         }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH_ROOM_DB);
+            throw new IOException("Can not write to file " + utils.getPathRoomDB());
         }
         return room;
     }
@@ -46,7 +47,7 @@ public class RoomDAO {
 
         StringBuffer res = new StringBuffer();
 
-        String[] lines = readingFromFile(PATH_ROOM_DB).split("\n");
+        String[] lines = generalDAO.readingFromFile(utils.getPathRoomDB()).split("\n");
         int index = 0;
         for (String str : lines) {
             if (str != null && !str.equals(Long.toString(idRoom))){
@@ -56,7 +57,7 @@ public class RoomDAO {
             index++;
         }
 
-        writerInFailBD(PATH_ROOM_DB, res);
+        generalDAO.writerInFailBD(utils.getPathRoomDB(), res);
     }
 
     public static Collection findRooms(Filter filter)throws Exception{
@@ -65,7 +66,7 @@ public class RoomDAO {
 
         LinkedList<Room> foundRooms = new LinkedList<>();
 
-        for (Room el : findsRoomInFile(PATH_ROOM_DB)) {
+        for (Room el : findsRoomInFile(utils.getPathRoomDB())) {
             if (el.getNumberOfGuests() == filter.getNumberOfGuests() || filter.getNumberOfGuests() == 0 && el.getPrice() == filter.getPrice() || filter.getPrice() == 0){
                 if (el.getDateAvailableFrom().compareTo(filter.getDateAvailableFrom()) >= 0 || filter.getDateAvailableFrom() == null) {
                     if (el.isPetsAllowed() == filter.isPetsAllowed() && el.isBreakfastIncluded() == filter.isBreakfastIncluded()) {
@@ -90,7 +91,7 @@ public class RoomDAO {
             int countLine = 0;
             while ((line = br.readLine()) != null) {
                 countLine++;
-                checkLine(line, countLine, checkLength(path));
+                generalDAO.checkLine(line, countLine, generalDAO.checkLength(path));
                 String[] fields = line.split(",");
                 Room room = new Room();
                 room.setId(Long.parseLong(fields[0]));
@@ -122,12 +123,12 @@ public class RoomDAO {
 
         LinkedList<Hotel> hotels = new LinkedList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
+        try (BufferedReader br = new BufferedReader(new FileReader(utils.getPathHotelDB()))){
             String line;
             int countLine = 0;
             while ((line = br.readLine()) != null){
                 countLine++;
-                checkLine(line, countLine, checkLength(PATH_HOTEL_DB));
+                generalDAO.checkLine(line, countLine, generalDAO.checkLength(utils.getPathHotelDB()));
                 String[] result = line.split("\n");
                 int index = 0;
                 for (String el : result){
@@ -149,7 +150,7 @@ public class RoomDAO {
         } catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
+            throw new IOException("Reading from file " + utils.getPathHotelDB() + " failed");
         }
         return hotels.getFirst();
     }
@@ -158,7 +159,7 @@ public class RoomDAO {
         if (path == null || room == null)
             throw new BadRequestException("Invalid incoming data");
 
-        String[] words = readingFromFile(path).split(",");
+        String[] words = generalDAO.readingFromFile(path).split(",");
         int index = 0;
         for (String word : words) {
             if (word != null && word.equals(Long.toString(room.getId()))){
@@ -169,7 +170,7 @@ public class RoomDAO {
         return false;
     }
 
-    private static String readingFromFile(String path)throws Exception{
+    /*private static String readingFromFile(String path)throws Exception{
         if(path == null)
             throw new BadRequestException("This path " + path + " is not exists");
 
@@ -238,5 +239,5 @@ public class RoomDAO {
             }
         }
         return true;
-    }
+    }*/
 }

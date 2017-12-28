@@ -2,13 +2,17 @@ package dz_lesson35_36.dao;
 
 import dz_lesson35_36.exception.BadRequestException;
 import dz_lesson35_36.model.Hotel;
+import dz_lesson35_36.model.Utils;
 
 import java.io.*;
 import java.util.LinkedList;
 
 public class HotelDAO {
 
-    private static final String PATH_HOTEL_DB = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
+    private static Utils utils = new Utils();
+    private static GeneralDAO generalDAO = new GeneralDAO();
+
+    //private static final String PATH_HOTEL_DB = "C:\\Users\\Skorodielov\\Desktop\\HotelDB.txt";
 
     public static Hotel addHotel(Hotel hotel)throws Exception{
         //проверить по id есть ли такой отель в файле
@@ -16,12 +20,12 @@ public class HotelDAO {
         if (hotel == null)
             throw new BadRequestException("This " + hotel + " is not exist");
 
-        if (checkHotel(PATH_HOTEL_DB, hotel))
+        if (checkHotel(utils.getPathHotelDB(), hotel))
             throw new BadRequestException("Hotel with id " + hotel.getId() + " already exists");
 
-        checkingReadFile(PATH_HOTEL_DB);
+        generalDAO.checkingReadFile(utils.getPathHotelDB());
 
-        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_HOTEL_DB, true))){
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(utils.getPathHotelDB(), true))){
             bufferedWriter.append(Long.toString(hotel.getId())).append(",");
             bufferedWriter.append(hotel.getCountry()).append(",");
             bufferedWriter.append(hotel.getCity()).append(",");
@@ -29,7 +33,7 @@ public class HotelDAO {
             bufferedWriter.append(hotel.getName());
             bufferedWriter.append("\n");
         }catch (IOException e){
-            throw new IOException("Can not write to file " + PATH_HOTEL_DB);
+            throw new IOException("Can not write to file " + utils.getPathHotelDB());
         }
         return hotel;
     }
@@ -44,7 +48,7 @@ public class HotelDAO {
 
         StringBuffer res = new StringBuffer();
 
-        String[] lines = readingFromFile(PATH_HOTEL_DB).split("\n");
+        String[] lines = generalDAO.readingFromFile(utils.getPathHotelDB()).split("\n");
         int index = 0;
         for (String str : lines) {
             if (str != null && !str.equals(Long.toString(idHotel))){
@@ -54,7 +58,7 @@ public class HotelDAO {
             index++;
         }
 
-        writerInFailBD(PATH_HOTEL_DB, res);
+        generalDAO.writerInFailBD(utils.getPathHotelDB(), res);
     }
 
     public static LinkedList<Hotel> findHotelByName(String name)throws Exception{
@@ -65,11 +69,11 @@ public class HotelDAO {
         if (name == null)
             throw new BadRequestException("This name - " + name + " does not exist." );
 
-        checkingReadFile(PATH_HOTEL_DB);
+        generalDAO.checkingReadFile(utils.getPathHotelDB());
 
         LinkedList<Hotel> hotels = new LinkedList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
+        try (BufferedReader br = new BufferedReader(new FileReader(utils.getPathHotelDB()))){
             String line;
 
             while ((line = br.readLine()) != null){
@@ -94,7 +98,7 @@ public class HotelDAO {
         } catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
+            throw new IOException("Reading from file " + utils.getPathHotelDB() + " failed");
         }
         return hotels;
     }
@@ -107,11 +111,11 @@ public class HotelDAO {
         if (city == null)
             throw new BadRequestException("This city - " + city + " does not exist." );
 
-        checkingReadFile(PATH_HOTEL_DB);
+        generalDAO.checkingReadFile(utils.getPathHotelDB());
 
         LinkedList<Hotel> hotels = new LinkedList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH_HOTEL_DB))){
+        try (BufferedReader br = new BufferedReader(new FileReader(utils.getPathHotelDB()))){
             String line;
 
             while ((line = br.readLine()) != null){
@@ -136,7 +140,7 @@ public class HotelDAO {
         } catch (FileNotFoundException e){
             throw new FileNotFoundException("File does not exist");
         } catch (IOException e) {
-            throw new IOException("Reading from file " + PATH_HOTEL_DB + " failed");
+            throw new IOException("Reading from file " + utils.getPathHotelDB() + " failed");
         }
         return hotels;
     }
@@ -145,7 +149,7 @@ public class HotelDAO {
         if (path == null || hotel == null)
             throw new BadRequestException("Invalid incoming data");
 
-        String[] words = readingFromFile(path).split(",");
+        String[] words = generalDAO.readingFromFile(path).split(",");
         int index = 0;
         for (String word : words) {
             if (word != null && word.equals(Long.toString(hotel.getId()))){
@@ -156,7 +160,7 @@ public class HotelDAO {
         return false;
     }
 
-    private static String readingFromFile(String path)throws Exception{
+    /*private static String readingFromFile(String path)throws Exception{
         if(path == null)
             throw new BadRequestException("This path " + path + " is not exists");
 
@@ -232,6 +236,6 @@ public class HotelDAO {
             }
         }
         return true;
-    }
+    }*/
 }
 

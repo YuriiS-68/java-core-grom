@@ -6,13 +6,18 @@ import dz_lesson35_36.model.Hotel;
 
 public class HotelService {
 
-    private HotelDAO hotelDAO = new HotelDAO();
+    private static HotelDAO hotelDAO = new HotelDAO();
 
-    public Hotel addHotel(Hotel hotel)throws Exception{
+    public static Hotel addHotel(Hotel hotel)throws Exception{
         if (hotel == null)
             throw new BadRequestException("This " + hotel + " is not exist");
 
         return hotelDAO.addHotel(hotel);
+    }
+
+    public static void deleteHotel(Long idHotel)throws Exception{
+        if (idHotel == null)
+            throw new BadRequestException("This id " + idHotel + " is not exist");
     }
 
 
